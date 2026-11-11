@@ -1,0 +1,8 @@
+{
+  "include": ["content.ts"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "types": ["chrome"]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "latexicus",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Onni Nevala",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "dependencies": {
+    "@types/chrome": "^0.3.7"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
