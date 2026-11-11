@@ -1,8 +1,9 @@
 {
-  "include": ["content.ts"],
+  "include": ["src/*.ts"],
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "types": ["chrome"]
+      "lib": ["dom", "ES2022", "ES5"],
+      "types": ["chrome"],
+      "sourceMap": true,
+      "rootDir": "src",
   }
 }

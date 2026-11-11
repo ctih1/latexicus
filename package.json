@@ -4,16 +4,22 @@
   "description": "",
   "license": "MIT",
   "author": "Onni Nevala",
-  "type": "commonjs",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc"
+    "test": "vitest",
+    "build": "webpack"
   },
   "dependencies": {
     "@types/chrome": "^0.3.7"
   },
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "@babel/preset-env": "^8.0.7",
+    "@babel/preset-typescript": "^8.0.7",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "vitest": "^5.1.0",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1"
   }
 }

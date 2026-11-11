@@ -10,7 +10,7 @@
     "content_scripts": [
         {
             "matches": ["https://digabi.github.io/abicus/"],
-            "js": ["content.js"]
+            "js": ["build/content-bundle.js"]
         }
     ]
 }
