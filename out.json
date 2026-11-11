@@ -1,0 +1,149 @@
+{
+    "nested": 0,
+    "name": "frac",
+    "arguments": [
+        {
+            "type": "FixArg",
+            "latex": [
+                {
+                    "text": "4",
+                    "type": "TeXRaw",
+                    "characterCategories": [
+                        {
+                            "string": "4",
+                            "category": 11
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "FixArg",
+            "latex": [
+                {
+                    "name": "frac",
+                    "arguments": [
+                        {
+                            "type": "FixArg",
+                            "latex": [
+                                {
+                                    "text": "8",
+                                    "type": "TeXRaw",
+                                    "characterCategories": [
+                                        {
+                                            "string": "8",
+                                            "category": 11
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "FixArg",
+                            "latex": [
+                                {
+                                    "text": "5",
+                                    "type": "TeXRaw",
+                                    "characterCategories": [
+                                        {
+                                            "string": "5",
+                                            "category": 11
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "TeXComm"
+                },
+                {
+                    "name": "cdot",
+                    "arguments": [],
+                    "type": "TeXComm"
+                },
+                {
+                    "name": "Pi",
+                    "arguments": [],
+                    "type": "TeXComm"
+                }
+            ]
+        }
+    ],
+    "type": "TeXComm"
+}
+{
+    "nested": 1,
+    "text": "4",
+    "type": "TeXRaw",
+    "characterCategories": [
+        {
+            "string": "4",
+            "category": 11
+        }
+    ]
+}
+{
+    "nested": 1,
+    "name": "frac",
+    "arguments": [
+        {
+            "type": "FixArg",
+            "latex": [
+                {
+                    "text": "8",
+                    "type": "TeXRaw",
+                    "characterCategories": [
+                        {
+                            "string": "8",
+                            "category": 11
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "FixArg",
+            "latex": [
+                {
+                    "text": "5",
+                    "type": "TeXRaw",
+                    "characterCategories": [
+                        {
+                            "string": "5",
+                            "category": 11
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "type": "TeXComm"
+}
+{
+    "nested": 2,
+    "text": "8",
+    "type": "TeXRaw",
+    "characterCategories": [
+        {
+            "string": "8",
+            "category": 11
+        }
+    ]
+}
+{
+    "nested": 2,
+    "text": "5",
+    "type": "TeXRaw",
+    "characterCategories": [
+        {
+            "string": "5",
+            "category": 11
+        }
+    ]
+}
+{
+    "nested": 0,
+    "name": "Pi",
+    "arguments": [],
+    "type": "TeXComm"
+}
