@@ -12,6 +12,38 @@ export interface FuckedToken {
     text?: string;
 }
 
+export function needsMultiplication(
+    current: FuckedToken,
+    last: FuckedToken | undefined,
+    currentOutput: string
+): boolean {
+    // console.log(
+    //     `Comma: ${last?.name || last?.text}=${last?.type}|${current.name || current.text}=${current.type};${currentOutput}`
+    // );
+    if (!last) return false;
+    if (currentOutput.trimEnd().endsWith("*")) {
+        return false;
+    }
+    if ((current.name || current.text)?.endsWith(")")) return false;
+
+    if (last.type === "TeXRaw") {
+        if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
+            return false;
+        // console.log("allowign comma");
+        if (!!Number(last.text)) return true;
+        if (current.type === "TeXComm") return true;
+    } else if (last.type === "TeXComm") {
+        if (current.type === "TeXComm") {
+            if (last.name === "frac" && current.name === "frac") return false;
+            // console.log("allowign comma");
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 export function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
@@ -27,6 +59,7 @@ export function convertToString(
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     // @ts-ignore
+
     if (token.type === "TeXRaw") {
         // @ts-ignore
         output += token.text;
@@ -96,15 +129,7 @@ export function convertToString(
         }
     }
 
-    if (
-        previousToken &&
-        !output.trimEnd().endsWith("*") &&
-        ((previousToken.type === "TeXRaw" && !!Number(previousToken.text)) ||
-            (previousToken.type === "TeXComm" && token.type === "TeXComm"))
-    ) {
-        console.log(
-            `Comma: ${previousToken.name || previousToken.text}=${previousToken.type}|${token.name || token.text}=${token.type};${output}`
-        );
+    if (needsMultiplication(token, previousToken, output)) {
         output = "*" + output;
     }
 
@@ -114,15 +139,17 @@ export function convertToString(
 export function parseEntireCalculation(calc: string): string {
     let lastToken: FuckedToken | undefined = undefined;
     let output = "";
-    for (const token of latexParser.parse(
-        "\\sqrt{\\frac{52^2}{\\frac{24}{18}Pi}}\\sin(15)-2"
-            .replaceAll("{,}", ".")
-            .replaceAll("°", "")
-            .replaceAll("\\left", "")
-            .replaceAll("\\right", "")
-            .replaceAll("Pi", "\\Pi")
-            .replaceAll("pi", "\\pi")
-    ).value!) {
+    for (const token of latexParser
+        .parse(
+            calc
+                .replaceAll("{,}", ".")
+                .replaceAll("°", "")
+                .replaceAll("\\left", "")
+                .replaceAll("\\right", "")
+                .replaceAll("Pi", "\\Pi")
+                .replaceAll("pi", "\\pi")
+        )
+        .value!.flat(Infinity)) {
         output += convertToString(token as FuckedToken, lastToken);
         lastToken = token as FuckedToken;
     }
