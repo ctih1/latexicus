@@ -29,13 +29,13 @@ export function needsMultiplication(
     if (last.type === "TeXRaw") {
         if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
             return false;
-        // console.log("allowign comma");
+        console.log("allowign comma");
         if (!!Number(last.text)) return true;
         if (current.type === "TeXComm") return true;
     } else if (last.type === "TeXComm") {
         if (current.type === "TeXComm") {
             if (last.name === "frac" && current.name === "frac") return false;
-            // console.log("allowign comma");
+            console.log("allowign comma");
 
             return true;
         }
@@ -48,7 +48,7 @@ export function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
     nested: number = 0
-) {
+): string {
     console.log(
         `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type})`
     );
@@ -58,15 +58,9 @@ export function convertToString(
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
-    // @ts-ignore
-
     if (token.type === "TeXRaw") {
-        // @ts-ignore
         output += token.text;
-    }
-    // @ts-ignore
-    else if (token.type === "TeXComm") {
-        // @ts-ignore
+    } else if (token.type === "TeXComm") {
         switch (token.name) {
             case "cdot": {
                 output += "*";
@@ -78,7 +72,6 @@ export function convertToString(
                 for (let i = 0; i < token.arguments.length; i++) {
                     const arg = token.arguments[i];
                     let tempResult = "";
-                    // @ts-ignore
 
                     for (let j = 0; j < arg.latex.length; j++) {
                         tempResult += convertToString(

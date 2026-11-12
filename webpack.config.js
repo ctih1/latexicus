@@ -1,13 +1,14 @@
 const path = require("path");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     devtool: "inline-source-map",
+    watch: true,
     entry: {
         main: "./src/main.ts"
     },
     output: {
-        path: path.resolve(__dirname, "./build"),
+        path: path.resolve(__dirname, "./dist"),
         filename: "content-bundle.js"
     },
     resolve: {

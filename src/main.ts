@@ -1,8 +1,10 @@
 import { latexParser } from "latex-parser";
 import { parseEntireCalculation, FuckedToken } from "./converter";
+import { addLatexicusIndicator, showNotification } from "./ui";
 
-console.log("Loaded latexicus!");
 if (window) {
+    showNotification("Loaded Latexicus", 3000);
+    addLatexicusIndicator();
     addEventListener("paste", e => {
         if (!e.clipboardData) {
             return;
@@ -15,5 +17,6 @@ if (window) {
 
         document.execCommand("insertText", false, convertedText);
         e.preventDefault();
+        showNotification("Successfully converted!", 4000);
     });
 }
