@@ -5,7 +5,7 @@ interface FuckedArg {
     latex: { text?: string; latex?: string; arguments?: FuckedArg[]; type: string }[];
 }
 
-interface FuckedToken {
+export interface FuckedToken {
     type: string;
     arguments: FuckedArg[];
     name?: string;
@@ -98,11 +98,12 @@ export function convertToString(
 
     if (
         previousToken &&
+        !output.trimEnd().endsWith("*") &&
         ((previousToken.type === "TeXRaw" && !!Number(previousToken.text)) ||
             (previousToken.type === "TeXComm" && token.type === "TeXComm"))
     ) {
         console.log(
-            `${previousToken.name || previousToken.text}=${previousToken.type}|${token.name || token.text}=${token.type};${output}`
+            `Comma: ${previousToken.name || previousToken.text}=${previousToken.type}|${token.name || token.text}=${token.type};${output}`
         );
         output = "*" + output;
     }
