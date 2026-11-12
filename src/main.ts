@@ -1,5 +1,3 @@
-import { LatexConverter } from "./parser";
-
 if (window) {
     addEventListener("paste", e => {
         if (!e.clipboardData) {

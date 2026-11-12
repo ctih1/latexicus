@@ -1,3 +1,5 @@
+import { latexParser } from "latex-parser";
+
 interface FuckedArg {
     type: string;
     latex: { text?: string; latex?: string; arguments?: FuckedArg[]; type: string }[];
@@ -103,6 +105,25 @@ export function convertToString(
             `${previousToken.name || previousToken.text}=${previousToken.type}|${token.name || token.text}=${token.type};${output}`
         );
         output = "*" + output;
+    }
+
+    return output;
+}
+
+export function parseEntireCalculation(calc: string): string {
+    let lastToken: FuckedToken | undefined = undefined;
+    let output = "";
+    for (const token of latexParser.parse(
+        "\\sqrt{\\frac{52^2}{\\frac{24}{18}Pi}}\\sin(15)-2"
+            .replaceAll("{,}", ".")
+            .replaceAll("°", "")
+            .replaceAll("\\left", "")
+            .replaceAll("\\right", "")
+            .replaceAll("Pi", "\\Pi")
+            .replaceAll("pi", "\\pi")
+    ).value!) {
+        output += convertToString(token as FuckedToken, lastToken);
+        lastToken = token as FuckedToken;
     }
 
     return output;
