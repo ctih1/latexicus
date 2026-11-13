@@ -12,10 +12,12 @@ export interface FuckedToken {
     text?: string;
 }
 
+
 export function needsMultiplication(
     current: FuckedToken,
     last: FuckedToken | undefined,
-    currentOutput: string
+    currentOutput: string,
+    tokenTree: FuckedToken[] = []
 ): boolean {
     // console.log(
     //     `Comma: ${last?.name || last?.text}=${last?.type}|${current.name || current.text}=${current.type};${currentOutput}`
@@ -24,8 +26,12 @@ export function needsMultiplication(
     if (currentOutput.trimEnd().endsWith("*")) {
         return false;
     }
+
     if ((current.name || current.text)?.endsWith(")")) return false;
 
+    if(tokenTree.at(-1)?.name === "frac") {
+        return false;
+    }
     if (last.type === "TeXRaw") {
         if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
             return false;
@@ -47,10 +53,11 @@ export function needsMultiplication(
 export function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
-    nested: number = 0
+    nested: number = 0,
+    tokenTree: FuckedToken[] = []
 ): string {
     console.log(
-        `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type})`
+        `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name||a.text).join("->")}`
     );
     let output = "";
 
@@ -77,7 +84,8 @@ export function convertToString(
                         tempResult += convertToString(
                             arg.latex[j] as FuckedToken,
                             token,
-                            nested + 1
+                            nested + 1,
+                            [...tokenTree, token]
                         );
                     }
                     result[i] = tempResult;
@@ -95,7 +103,7 @@ export function convertToString(
                     if (arg.type === "OptArg") {
                         nthRoot = arg.latex[0].text!;
                     } else {
-                        value = convertToString(arg.latex[0] as FuckedToken, token, nested + 1);
+                        value = convertToString(arg.latex[0] as FuckedToken, token, nested + 1, [...tokenTree, token]);
                     }
                 }
 
@@ -122,7 +130,7 @@ export function convertToString(
         }
     }
 
-    if (needsMultiplication(token, previousToken, output)) {
+    if (needsMultiplication(token, previousToken, output, tokenTree)) {
         output = "*" + output;
     }
 
