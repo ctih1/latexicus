@@ -1,4 +1,4 @@
-const VERSION = "0.0.4";
+const VERSION="0.0.5";
 try {
     window;
     var isBrowser = true;
