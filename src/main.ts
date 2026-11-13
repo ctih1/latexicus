@@ -1,4 +1,3 @@
-import { latexParser } from "latex-parser";
 import { parseEntireCalculation, FuckedToken } from "./converter";
 import { addLatexicusIndicator, showNotification } from "./ui";
 
@@ -9,7 +8,11 @@ if (window) {
         if (!e.clipboardData) {
             return;
         }
-        let text = e.clipboardData.getData("text");
+        let text = e.clipboardData.getData("text").replaceAll(" ", "");
+
+        if(!text.includes("\\")) {
+            return;
+        }
 
         const convertedText = parseEntireCalculation(text);
         const mathInput = document.getElementsByTagName("input")[0];
@@ -17,6 +20,11 @@ if (window) {
 
         document.execCommand("insertText", false, convertedText);
         e.preventDefault();
-        showNotification("Successfully converted!", 4000);
+
+        if(/(sin|cos|tan)[0-9]+/.test(text)) {
+            showNotification("Detected sin/cos/tan without parenthesis. This will produce unexpected results", 15000, "error")
+        } else {
+            showNotification("Successfully converted!", 4000);
+        }
     });
 }

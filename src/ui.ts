@@ -11,7 +11,7 @@ function initNotifBox(): HTMLDivElement {
     const notificationBoxNode: HTMLDivElement = document.createElement("div");
     window.document.body.appendChild(notificationBoxNode);
     notificationBoxNode.id = "notif-box";
-    notificationBoxNode.style = "position: fixed;top: 0px; right: 0px; z-index: 69; padding: 4px;";
+    notificationBoxNode.style = "position: fixed;top: 0px; right: 0px; z-index: 69; padding: 4px; max-width: 480px;";
     notificationBoxNode.className = "rounded-sm bg-white";
 
     notificationBoxNode.appendChild(dismissNotifButton);
@@ -57,7 +57,7 @@ function handleButtonVisibility() {
     }
 }
 
-export function showNotification(text: string, timeoutMs: number, type: "info" | "error" = "info") {
+export function showNotification(text: string, timeoutMs: number, type: "info" | "error"  | "warn" = "info") {
     const logElement: HTMLParagraphElement = document.createElement("p");
     logElement.className = "text-xl";
     logElement.classList.add("notification-element");
@@ -66,7 +66,8 @@ export function showNotification(text: string, timeoutMs: number, type: "info" |
     logElement.innerText = text;
 
     if (type === "error") {
-        logElement.classList.add("danger");
+        logElement.innerText = "⚠︎:" + text;
+        logElement.style.color = "#fc2828";
     }
 
     logElement.id = `notification-${notifId}`;
