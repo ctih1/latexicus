@@ -1,4 +1,4 @@
-import { parseEntireCalculation, FuckedToken } from "./converter";
+import { parseEntireCalculation } from "./converter";
 import { addLatexicusIndicator, showNotification } from "./ui";
 
 if (window) {
@@ -19,6 +19,24 @@ if (window) {
         const shouldRemoveCharacters: boolean | undefined = (
             await browser.storage.sync.get(["remove-characters"])
         )["remove-characters"] as boolean | undefined;
+
+        const equalsSplitStrat: string | undefined = (
+            await browser.storage.sync.get(["equals-strategy"])
+        )["equals-strategy"] as string | undefined;
+
+        if (text.includes("=")) {
+            const parts = text.split("=", 2);
+            console.log(parts);
+            if (equalsSplitStrat === "left") {
+                text = parts[0];
+            }
+            if (equalsSplitStrat === "right") {
+                text = parts[1];
+            }
+            if (equalsSplitStrat === "longer") {
+                text = parts[0].length > parts[1].length ? parts[0] : parts[1];
+            }
+        }
 
         const convertedText = parseEntireCalculation(text, {
             stripLetters: shouldRemoveCharacters || false

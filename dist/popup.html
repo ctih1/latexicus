@@ -6,7 +6,7 @@
     <meta charset="utf-8">
 </head>
 
-<body style="min-width:300px">
+<body style="min-width:350px">
     <h1>Latexicus</h1>
 
     <hr>
@@ -22,6 +22,30 @@
         <div>
             <label for="remove-characters"><h4>Remove characters</h4><span>Strips certain characters from parts of equations.<br>Example: 5N*8kg -> 5*8</span></label>
             <input id="remove-characters" type="checkbox">
+        </div>
+        <div>
+            <label for="hide-green-dot"><h4>Hide the green dot in the top left corner</h4></label>
+            <input id="hide-green-dot" type="checkbox">
+        </div>
+        <div>
+            <label style="width: 250px;" for="equals-strategy">
+                <h4>Equals removal strategy</h4>
+                <span>
+                    Changes how the program handles the equals (=) sign in statements.
+                </span>
+            </label>
+            <span>
+                Current strategy of 
+                <select id="equals-strategy">
+                    <option selected value="left">Left side as input</option>
+                    <option value="right">Right side as input</option>
+                    <option value="longer">Longer side as input</option>
+                </select>:<br>
+                120*2=240
+                <br>
+                <b>Processed as: <span id="processed-result">120*2</span></b>
+            </span>
+
         </div>
     </div>
 
@@ -50,6 +74,7 @@
         display: flex;
         align-items: center;
         column-gap: 12px;
+        margin-bottom: 12px;
     }
     .settings div label h4 {
         margin: 0px;

@@ -1,11 +1,11 @@
-const VERSION="0.0.4";
+const VERSION = "0.0.4";
 try {
     window;
-    var browser = true;
+    var isBrowser = true;
 } catch (e) {
-    var browser = false;
+    var isBrowser = false;
 }
-if (browser) {
+if (isBrowser) {
     var dismissNotifButton: HTMLButtonElement = document.createElement("button");
     dismissNotifButton.innerHTML = "Clear all";
     dismissNotifButton.className =
@@ -28,10 +28,16 @@ function initNotifBox(): HTMLDivElement {
 }
 
 export function addLatexicusIndicator() {
-    const indicator: HTMLSpanElement = document.createElement("span");
-    indicator.style =
-        "position: fixed; top: 4px; left: 4px; z-index: 70; border-radius: 100%; width: 8px; height: 8px; background-color: #47DB32;";
-    document.body.appendChild(indicator);
+    (async () => {
+        const greenDot = (await browser.storage.sync.get(["hide-green-dot"]))["hide-green-dot"];
+        if (greenDot) {
+            return;
+        }
+        const indicator: HTMLSpanElement = document.createElement("span");
+        indicator.style =
+            "position: fixed; top: 4px; left: 4px; z-index: 70; border-radius: 100%; width: 8px; height: 8px; background-color: #47DB32;";
+        document.body.appendChild(indicator);
+    })();
 
     const abicusText = document.querySelectorAll<HTMLDivElement>(
         "#root > main > div:nth-child(2) > div > div"
@@ -71,7 +77,7 @@ export function showNotification(
     timeoutMs: number,
     type: "info" | "error" | "warn" = "info"
 ) {
-    if (!browser) {
+    if (!isBrowser) {
         console.log(text);
         return;
     }
