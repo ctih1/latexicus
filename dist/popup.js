@@ -34,6 +34,8 @@ async function initialize() {
             await browser.storage.sync.set(settings);
         });
     }
+
+    updateEqualsStratVisualisation();
 }
 
 function updateEqualsStratVisualisation() {
@@ -53,7 +55,6 @@ function updateEqualsStratVisualisation() {
     document.getElementById("processed-result").innerText = equalsStratResult;
 }
 
-updateEqualsStratVisualisation();
 document
     .getElementById("equals-strategy")
     .addEventListener("change", _ => updateEqualsStratVisualisation());
