@@ -7,33 +7,6 @@ import {
     parseEntireCalculation
 } from "../converter";
 
-// test("Separation of parts", () => {
-//     expect(LatexConverter.parseParenthesisContent("\\frac{2}{4}", "{", "}")).toStrictEqual([
-//         "2",
-//         "4"
-//     ]);
-//     expect(
-//         LatexConverter.parseParenthesisContent("\\frac{\\frac{2}{8}}{Pi\\cdot8}", "{", "}")
-//     ).toStrictEqual(["\\frac{2}{8}", "Pi\\cdot8"]);
-// });
-
-// test("Is complete token", () => {
-//     expect(LatexConverter.isTokenComplete("\\unknown")).toBe(false);
-//     expect(LatexConverter.isTokenComplete("\\fra")).toBe(false);
-//     expect(LatexConverter.isTokenComplete("\\frac")).toBe(false);
-//     expect(LatexConverter.isTokenComplete("\\frac{8}")).toBe(false);
-//     expect(LatexConverter.isTokenComplete("\\frac{8}{4}")).toBe(true);
-//     expect(LatexConverter.isTokenComplete("\\frac{\\frac{8}{4}}{4}")).toBe(true);
-
-//     expect(LatexConverter.isTokenComplete("2Pi", "\\")).toBe(true);
-//     expect(LatexConverter.isTokenComplete("2P", "i")).toBe(false);
-// });
-
-// test("All-in-one equation tests", () => {
-//     const testString = "2Pi\\cdot \\frac{r^3}{\\sqrt[8]{6{,}561}}";
-//     console.log(LatexConverter.parse(testString));
-//     console.log(LatexConverter.parseParenthesisContent("\\frac{\\frac{2}{4}}{2}", "{", "}"));
-// });
 
 test("basic multiplication detection with numbers", () => {
     let tokens: FuckedToken[] = latexParser.parse("4+2").value as FuckedToken[];
@@ -60,7 +33,6 @@ test("multiplication detection with two functions", () => {
     expect(needsMultiplication(tokens[1], tokens[0], "")).toBe(false);
     expect(needsMultiplication(tokens[2], tokens[1], "")).toBe(true);
     tokens = latexParser.parse("\\sin (50)+\\sin(20)").value as FuckedToken[];
-    console.log(tokens);
     expect(needsMultiplication(tokens[2], tokens[1], "")).toBe(false);
 });
 
@@ -112,3 +84,10 @@ test("sqrt", () => {
     expect(parseEntireCalculation("8\\sqrt{8}")).toBe("8*√(8;2)");
     expect(parseEntireCalculation("\\sqrt{2}^2")).toBe("√(2;2)^2");
 });
+
+
+// more advanced factorials arent supported yet, aka like (5-2)!
+test("simple factorial", () => {
+    expect(parseEntireCalculation("5!")).toBe("5*4*3*2*1");
+    expect(parseEntireCalculation("8!")).toBe("8*7*6*5*4*3*2*1");
+})

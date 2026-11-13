@@ -1,11 +1,22 @@
 // nicely adapted from another project of mine, https://github.com/ctih1/zte-dashboard/blob/master/src/zte_dashboard/pages/utils.js
-const dismissNotifButton: HTMLButtonElement = document.createElement("button");
-dismissNotifButton.innerHTML = "Clear all";
-dismissNotifButton.className =
-    "key rounded-sm border border-blue text-xl transition-all duration-75 scale-100 active:scale-97 bg-red text-white border-none";
-dismissNotifButton.style.width = "100%";
-dismissNotifButton.style.marginTop = "12px";
-dismissNotifButton.onclick = _ => clearNotificationBox();
+
+
+try {
+    window;
+    var browser = true;
+} catch(e) {
+    var browser =false;
+}
+if(browser) {
+    var dismissNotifButton: HTMLButtonElement = document.createElement("button");
+    dismissNotifButton.innerHTML = "Clear all";
+    dismissNotifButton.className =
+        "key rounded-sm border border-blue text-xl transition-all duration-75 scale-100 active:scale-97 bg-red text-white border-none";
+    dismissNotifButton.style.width = "100%";
+    dismissNotifButton.style.marginTop = "12px";
+    dismissNotifButton.onclick = _ => clearNotificationBox();
+}
+
 
 function initNotifBox(): HTMLDivElement {
     const notificationBoxNode: HTMLDivElement = document.createElement("div");
@@ -58,6 +69,10 @@ function handleButtonVisibility() {
 }
 
 export function showNotification(text: string, timeoutMs: number, type: "info" | "error"  | "warn" = "info") {
+    if(!browser) {
+        console.log(text);
+        return;
+    }
     const logElement: HTMLParagraphElement = document.createElement("p");
     logElement.className = "text-xl";
     logElement.classList.add("notification-element");

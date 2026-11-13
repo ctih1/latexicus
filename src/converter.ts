@@ -1,4 +1,5 @@
 import { latexParser } from "latex-parser";
+import { showNotification } from "./ui";
 
 interface FuckedArg {
     type: string;
@@ -61,12 +62,20 @@ export function convertToString(
     );
     let output = "";
 
-    let handledLatexIndices = 0;
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     if (token.type === "TeXRaw") {
-        output += token.text;
+        const value = Number(token.text!.replace("!", ""));
+        if(token.text?.endsWith("!") && !isNaN(value)) {
+            for(let i=value; i>0; i--) {
+                output += i+"*"
+            }
+            output = output.slice(0, output.length-1);
+        } else {
+            output += token.text;
+
+        }
     } else if (token.type === "TeXComm") {
         switch (token.name) {
             case "cdot": {
@@ -107,7 +116,6 @@ export function convertToString(
                     }
                 }
 
-                handledLatexIndices++;
 
                 output += `√(${value};${nthRoot})`;
                 break;
@@ -125,6 +133,11 @@ export function convertToString(
             case "arccos":
             case "arctan": {
                 output += token.name;
+                break;
+            }
+
+            default: {
+                showNotification(`Unrecognized token "${token.name}"`, 8000, "error")
                 break;
             }
         }
@@ -147,6 +160,8 @@ export function parseEntireCalculation(calc: string): string {
                 .replaceAll("°", "")
                 .replaceAll("\\left", "")
                 .replaceAll("\\right", "")
+                .replaceAll("\\pi", "pi")
+                .replaceAll("\\Pi", "Pi")
                 .replaceAll("Pi", "\\Pi")
                 .replaceAll("pi", "\\pi")
         )
