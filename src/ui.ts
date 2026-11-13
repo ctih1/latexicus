@@ -1,6 +1,4 @@
-// nicely adapted from another project of mine, https://github.com/ctih1/zte-dashboard/blob/master/src/zte_dashboard/pages/utils.js
-
-
+const VERSION="0.0.2";
 try {
     window;
     var browser = true;
@@ -44,7 +42,7 @@ export function addLatexicusIndicator() {
     }
 
     abicusText.style = "text-align: center";
-    abicusText.innerHTML += "<br>Latexicus v0.0.1";
+    abicusText.innerHTML += `<br>Latexicus v${VERSION}`;
 }
 
 function getNotificationBox(): HTMLDivElement {
