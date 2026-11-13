@@ -6,6 +6,10 @@ interface FuckedArg {
     latex: { text?: string; latex?: string; arguments?: FuckedArg[]; type: string }[];
 }
 
+export interface Options {
+    stripLetters?: boolean;
+}
+
 export interface FuckedToken {
     type: string;
     arguments: FuckedArg[];
@@ -59,17 +63,21 @@ export function needsMultiplication(
 export function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
-    nested: number = 0,
-    tokenTree: FuckedToken[] = []
+    tokenTree: FuckedToken[] = [],
+    options: Options = {}
 ): string {
     console.log(
-        `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
+        `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
     );
     let output = "";
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     if (token.type === "TeXRaw") {
+        if (options.stripLetters) {
+            token.text = /([0-9]+)[A-Za-z]*/.exec(token.text!)![1];
+        }
+
         const value = Number(token.text!.replace("!", ""));
         if (token.text?.endsWith("!") && !isNaN(value)) {
             for (let i = value; i > 0; i--) {
@@ -96,8 +104,8 @@ export function convertToString(
                         tempResult += convertToString(
                             arg.latex[j] as FuckedToken,
                             token,
-                            nested + 1,
-                            [...tokenTree, token]
+                            [...tokenTree, token],
+                            options
                         );
                     }
                     result[i] = tempResult;
@@ -115,10 +123,12 @@ export function convertToString(
                     if (arg.type === "OptArg") {
                         nthRoot = arg.latex[0].text!;
                     } else {
-                        value = convertToString(arg.latex[0] as FuckedToken, token, nested + 1, [
-                            ...tokenTree,
-                            token
-                        ]);
+                        value = convertToString(
+                            arg.latex[0] as FuckedToken,
+                            token,
+                            [...tokenTree, token],
+                            options
+                        );
                     }
                 }
 
@@ -155,7 +165,7 @@ export function convertToString(
     return output;
 }
 
-export function parseEntireCalculation(calc: string): string {
+export function parseEntireCalculation(calc: string, options: Options = {}): string {
     let lastToken: FuckedToken | undefined = undefined;
     let output = "";
     for (const token of latexParser
@@ -172,7 +182,7 @@ export function parseEntireCalculation(calc: string): string {
                 .replaceAll(" ", "")
         )
         .value!.flat(Infinity)) {
-        output += convertToString(token as FuckedToken, lastToken);
+        output += convertToString(token as FuckedToken, lastToken, undefined, options);
         lastToken = token as FuckedToken;
     }
 

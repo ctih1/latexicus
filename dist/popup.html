@@ -4,14 +4,6 @@
 
 <head>
     <meta charset="utf-8">
-    <style>
-        ul {
-            margin-top: 0px;
-        }
-        ul li {
-            font-size: 1rem;
-        }
-    </style>
 </head>
 
 <body style="min-width:300px">
@@ -25,6 +17,15 @@
     </ul>
 
     <hr>
+    <h3>Settings</h3>
+    <div class="settings">
+        <div>
+            <label for="remove-characters"><h4>Remove characters</h4><span>Strips certain characters from parts of equations.<br>Example: 5N*8kg -> 5*8</span></label>
+            <input id="remove-characters" type="checkbox">
+        </div>
+    </div>
+
+    <hr>
     <h3>Submit feedback</h3>
     <p>Email me at latexicus@ctih1.fi to report any issues! :3</p>
 
@@ -33,6 +34,30 @@
     <ul >
         <li><a href="https://github.com/escherpad/latex-parser">escherpad's latex-parser</a></li>
     </ul>
+
+    <script src="popup.js"></script>
 </body>
 
+
+<style>
+    ul {
+        margin-top: 0px;
+    }
+    ul li {
+        font-size: 1rem;
+    }
+    .settings div {
+        display: flex;
+        align-items: center;
+        column-gap: 12px;
+    }
+    .settings div label h4 {
+        margin: 0px;
+    }
+    .settings div input[type="checkbox"] {
+        scale: 1.5;
+    }
+</style>
+
 </html>
+

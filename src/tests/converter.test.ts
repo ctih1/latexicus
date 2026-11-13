@@ -101,3 +101,9 @@ test("simple factorial", () => {
     expect(parseEntireCalculation("5!")).toBe("5*4*3*2*1");
     expect(parseEntireCalculation("8!")).toBe("8*7*6*5*4*3*2*1");
 });
+
+test("test stripping letters", () => {
+    expect(parseEntireCalculation("5N\\cdot8kg", { stripLetters: true })).toBe("5*8");
+    expect(parseEntireCalculation("5\\cdot8kg", { stripLetters: true })).toBe("5*8");
+    expect(parseEntireCalculation("5Pi", { stripLetters: true })).toBe("5*pi");
+});
