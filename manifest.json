@@ -2,11 +2,8 @@
     "manifest_version": 3,
     "name": "Latexicus",
     "description": "Adds functionality to allow directly pasting Latex into Abicus",
-    "version": "0.0.2",
-    "permissions": [
-        "activeTab",
-        "scripting"
-    ],
+    "version": "0.0.3",
+    "permissions": [],
     "content_scripts": [
         {
             "matches": [

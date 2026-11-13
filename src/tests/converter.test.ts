@@ -7,7 +7,6 @@ import {
     parseEntireCalculation
 } from "../converter";
 
-
 test("basic multiplication detection with numbers", () => {
     let tokens: FuckedToken[] = latexParser.parse("4+2").value as FuckedToken[];
     expect(needsMultiplication(tokens[0], undefined, "")).toBe(false);
@@ -64,6 +63,18 @@ test("multiplication with functions on one side", () => {
     expect(parseEntireCalculation("52\\sin(52)")).toBe("52*sin(52)");
     expect(parseEntireCalculation("(52\\cdot52)\\sin(52)")).toBe("(52*52)*sin(52)");
     expect(parseEntireCalculation("\\frac{52}{52}\\sin(52)")).toBe("(52/52)*sin(52)");
+    expect(parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")).toBe(
+        "sin(50)*cos(20)"
+    );
+    expect(parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")).toBe(
+        "sin(50)*cos(20)"
+    );
+
+    expect(
+        parseEntireCalculation(
+            "5+\\left(\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)\\right)"
+        )
+    ).toBe("5+(sin(50)*cos(20))");
 });
 
 test("multiplication with functions on both sides", () => {
@@ -85,9 +96,8 @@ test("sqrt", () => {
     expect(parseEntireCalculation("\\sqrt{2}^2")).toBe("√(2;2)^2");
 });
 
-
 // more advanced factorials arent supported yet, aka like (5-2)!
 test("simple factorial", () => {
     expect(parseEntireCalculation("5!")).toBe("5*4*3*2*1");
     expect(parseEntireCalculation("8!")).toBe("8*7*6*5*4*3*2*1");
-})
+});

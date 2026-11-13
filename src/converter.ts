@@ -13,7 +13,6 @@ export interface FuckedToken {
     text?: string;
 }
 
-
 export function needsMultiplication(
     current: FuckedToken,
     last: FuckedToken | undefined,
@@ -24,14 +23,20 @@ export function needsMultiplication(
     //     `Comma: ${last?.name || last?.text}=${last?.type}|${current.name || current.text}=${current.type};${currentOutput}`
     // );
     if (!last) return false;
-    if (currentOutput.trimEnd().endsWith("*")) {
+    if (currentOutput.trimEnd().endsWith("*") || currentOutput.trimEnd().endsWith("(")) {
         return false;
     }
 
-    if ((current.name || current.text)?.endsWith(")")) return false;
+    const targetCurrentText = current.name || current.text!;
+    const targetPrevText = last.name || last.text!;
+    if (targetCurrentText.endsWith(")")) return false;
+    if (targetPrevText.endsWith("(")) return false;
 
-    if(tokenTree.at(-1)?.name === "frac") {
+    if (tokenTree.at(-1)?.name === "frac") {
         return false;
+    }
+    if (last.type === "TeXComm") {
+        if (last.name === "cdot") return false;
     }
     if (last.type === "TeXRaw") {
         if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
@@ -58,23 +63,21 @@ export function convertToString(
     tokenTree: FuckedToken[] = []
 ): string {
     console.log(
-        `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name||a.text).join("->")}`
+        `|${"----".repeat(nested)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
     );
     let output = "";
-
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     if (token.type === "TeXRaw") {
         const value = Number(token.text!.replace("!", ""));
-        if(token.text?.endsWith("!") && !isNaN(value)) {
-            for(let i=value; i>0; i--) {
-                output += i+"*"
+        if (token.text?.endsWith("!") && !isNaN(value)) {
+            for (let i = value; i > 0; i--) {
+                output += i + "*";
             }
-            output = output.slice(0, output.length-1);
+            output = output.slice(0, output.length - 1);
         } else {
             output += token.text;
-
         }
     } else if (token.type === "TeXComm") {
         switch (token.name) {
@@ -112,10 +115,12 @@ export function convertToString(
                     if (arg.type === "OptArg") {
                         nthRoot = arg.latex[0].text!;
                     } else {
-                        value = convertToString(arg.latex[0] as FuckedToken, token, nested + 1, [...tokenTree, token]);
+                        value = convertToString(arg.latex[0] as FuckedToken, token, nested + 1, [
+                            ...tokenTree,
+                            token
+                        ]);
                     }
                 }
-
 
                 output += `√(${value};${nthRoot})`;
                 break;
@@ -137,7 +142,7 @@ export function convertToString(
             }
 
             default: {
-                showNotification(`Unrecognized token "${token.name}"`, 8000, "error")
+                showNotification(`Unrecognized token "${token.name}"`, 8000, "error");
                 break;
             }
         }
@@ -164,6 +169,7 @@ export function parseEntireCalculation(calc: string): string {
                 .replaceAll("\\Pi", "Pi")
                 .replaceAll("Pi", "\\Pi")
                 .replaceAll("pi", "\\pi")
+                .replaceAll(" ", "")
         )
         .value!.flat(Infinity)) {
         output += convertToString(token as FuckedToken, lastToken);

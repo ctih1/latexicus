@@ -1,11 +1,11 @@
-const VERSION="0.0.2";
+const VERSION="0.0.3";
 try {
     window;
     var browser = true;
-} catch(e) {
-    var browser =false;
+} catch (e) {
+    var browser = false;
 }
-if(browser) {
+if (browser) {
     var dismissNotifButton: HTMLButtonElement = document.createElement("button");
     dismissNotifButton.innerHTML = "Clear all";
     dismissNotifButton.className =
@@ -15,12 +15,12 @@ if(browser) {
     dismissNotifButton.onclick = _ => clearNotificationBox();
 }
 
-
 function initNotifBox(): HTMLDivElement {
     const notificationBoxNode: HTMLDivElement = document.createElement("div");
     window.document.body.appendChild(notificationBoxNode);
     notificationBoxNode.id = "notif-box";
-    notificationBoxNode.style = "position: fixed;top: 0px; right: 0px; z-index: 69; padding: 4px; max-width: 480px;";
+    notificationBoxNode.style =
+        "position: fixed;top: 0px; right: 0px; z-index: 69; padding: 4px; max-width: 480px;";
     notificationBoxNode.className = "rounded-sm bg-white";
 
     notificationBoxNode.appendChild(dismissNotifButton);
@@ -66,8 +66,12 @@ function handleButtonVisibility() {
     }
 }
 
-export function showNotification(text: string, timeoutMs: number, type: "info" | "error"  | "warn" = "info") {
-    if(!browser) {
+export function showNotification(
+    text: string,
+    timeoutMs: number,
+    type: "info" | "error" | "warn" = "info"
+) {
+    if (!browser) {
         console.log(text);
         return;
     }

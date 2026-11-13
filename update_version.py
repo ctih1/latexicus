@@ -11,7 +11,7 @@ with open("package.json", "w", encoding="UTF-8") as f:
 
 with open("src/ui.ts", "r", encoding="UTF-8") as f:
     lines = f.readlines()
-    lines[0] = f'const VERSION="{ver}";'
+    lines[0] = f'const VERSION="{ver}";\n'
 
 with open("src/ui.ts", "w", encoding="UTF-8") as f:
     f.writelines(lines)
