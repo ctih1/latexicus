@@ -40,10 +40,12 @@ test("simple division", () => {
 });
 
 test("nested division", () => {
-    expect(parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{8}}")).toBe("((4/8)/(4/8))");
+    expect(parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{8}}")).toBe("(((4/8))/((4/8)))");
     expect(parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{\\frac{4}{8}}}")).toBe(
-        "((4/8)/(4/(4/8)))"
+        "(((4/8))/((4/((4/8)))))"
     );
+
+    expect(parseEntireCalculation("\\frac{1}{5\\cdot \\frac{1}{1{,}5}}")).toBe("(1/(5*(1/1.5)))");
 });
 
 test("division with multiplication", () => {
@@ -51,7 +53,7 @@ test("division with multiplication", () => {
 });
 
 test("division with inner functions", () => {
-    expect(parseEntireCalculation("\\frac{\\frac{2}{8}}{Pi\\cdot8}")).toBe("((2/8)/pi*8)");
+    expect(parseEntireCalculation("\\frac{\\frac{2}{8}}{Pi\\cdot8}")).toBe("(((2/8))/(pi*8))");
 });
 
 test("simple multiplication", () => {

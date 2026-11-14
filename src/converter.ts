@@ -108,6 +108,9 @@ export function convertToString(
                             options
                         );
                     }
+                    if (/[\*\-\+\/]/.test(tempResult)) {
+                        tempResult = `(${tempResult})`;
+                    }
                     result[i] = tempResult;
                 }
 
