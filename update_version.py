@@ -1,6 +1,6 @@
 import json
 
-ver = input("Enter new version")
+ver = input("Enter new version: ")
 
 with open("package.json", "r", encoding="UTF-8") as f:
     data = json.load(f)
