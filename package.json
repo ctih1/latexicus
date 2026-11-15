@@ -10,6 +10,7 @@
     "test": "vitest",
     "build:latexicus": "webpack --config webpack.config.latexicus.js",
     "build:popup": "webpack --config webpack.config.popup.js",
+    "build": "webpack --config webpack.config.latexicus.js && webpack --config webpack.config.popup.js",
     "package": "tar -a -c -f latexicus.zip dist assets manifest.json"
   },
   "dependencies": {
