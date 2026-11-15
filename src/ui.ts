@@ -1,6 +1,6 @@
 import { t } from "./localization";
 
-const VERSION="0.1.0";
+const VERSION = "0.1.0";
 
 try {
     window;
@@ -29,7 +29,9 @@ async function submitReport(currentLatex: string, output: string): Promise<boole
 
 if (isBrowser) {
     var dismissNotifButton: HTMLButtonElement = document.createElement("button");
-    dismissNotifButton.innerHTML = "Clear all";
+    t("notifications_clear_all").then(text => {
+        dismissNotifButton.innerHTML = text;
+    });
     dismissNotifButton.className =
         "key rounded-sm border border-blue text-xl transition-all duration-75 scale-100 active:scale-97 bg-red text-white border-none";
     dismissNotifButton.style.width = "100%";
