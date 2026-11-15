@@ -1,0 +1,23 @@
+{
+    "language_dropdown": "Kieli: ",
+    "caveats_header": "Huom.",
+    "settings_header": "Asetukset",
+    "remove_char_settings_h": "Poista turhat merkit",
+    "remove_char_settings_d": "Poistaa tietyt merkit laskuista.<br>Esimerkiksi: 5N*8kg -> 5*8",
+    "green_dot_settings_h": "Piilota vihreä pallo vasemmasta yläkulmasta.",
+    "green_dot_settings_d": "Piilottaa pienen vihreän merkkivalon vasemmassa yläkulmassa, joka kertoo, että Latexicus on ladattu. ",
+    "equals_remove_settings_h": "Yhtäsuuruusmerkin poistostrategia",
+    "equals_remove_settings_d": "Vaikuttaa siihen, miten Latexicus hoitaa = merkit laskuissa.",
+    "equals_remove_settings_opt_r": "Oikea puoli syötteenä",
+    "equals_remove_settings_opt_l": "Vasen puoli syötteenä",
+    "equals_remove_settings_opt_longer": "Pidempi puoli syötteenä",
+    "equals_remove_settings_exp1": "Tämänhetkinen strategia: ",
+    "equals_remove_settings_exp2": "Valitsee laskuksi: ",
+    "submit_feedback": "Lähetä palautetta",
+    "support_email": "Lähetä sähköpostia osoitteeseen latexicus@ctih1.fi ilmoittaakseen ongelmista! :3",
+    "special_thanks": "Kiitokset:",
+    "notification_loaded": "Latexicus ladattu",
+    "notification_converted": "Muuntaminen onnistui",
+    "notification_sincos_error": "Huomattiin sin/cos/tan ilman sulkeita. Tämä voi tuottaa ongelmia.",
+    "notification_unrecogn_token": "Tunnistamaton token \"{token}\""
+}

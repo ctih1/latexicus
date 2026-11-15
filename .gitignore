@@ -2,3 +2,4 @@ node_modules
 content-bundle.js
 *.zip
 dist/content-bundle.js
+dist/popup-bundle.js

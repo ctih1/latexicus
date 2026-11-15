@@ -1,18 +1,18 @@
 const path = require("path");
 
 module.exports = {
-    mode: "production",
+    mode: "development",
     devtool: "inline-source-map",
-    watch: true,
+    watch: process.env.npm_config_watch || false,
     entry: {
-        main: "./src/main.ts"
+        main: "./src/popup.ts"
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "content-bundle.js"
+        filename: "popup-bundle.js"
     },
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts", ".js", ".json"]
     },
     module: {
         rules: [

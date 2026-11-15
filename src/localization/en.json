@@ -1,0 +1,23 @@
+{
+    "language_dropdown": "Language: ",
+    "caveats_header": "Caveats",
+    "settings_header": "Settings",
+    "remove_char_settings_h": "Remove characters",
+    "remove_char_settings_d": "Strips certain characters from parts of equations.<br>Example: 5N*8kg -> 5*8",
+    "green_dot_settings_h": "Hide the green dot in the top left corner",
+    "green_dot_settings_d": "Hides the little green dot in the top left corner letting you know that Latexicus loaded successfully",
+    "equals_remove_settings_h": "Equals removal strategy",
+    "equals_remove_settings_d": "Changes how the program handles the equals (=) sign in statements.",
+    "equals_remove_settings_opt_r": "Right side as input",
+    "equals_remove_settings_opt_l": "Left side as input",
+    "equals_remove_settings_opt_longer": "Longer side as input",
+    "equals_remove_settings_exp1": "Current strategy of",
+    "equals_remove_settings_exp2": "Processed as:",
+    "submit_feedback": "Submit feedback",
+    "support_email": "Email me at latexicus@ctih1.fi to report any issues! :3",
+    "special_thanks": "Special thanks to:",
+    "notification_loaded": "Loaded Latexicus!",
+    "notification_converted": "Successfully converted!",
+    "notification_sincos_error": "Detected sin/cos/tan without parenthesis. This will produce unexpected results",
+    "notification_unrecogn_token": "Unrecognized token \"{token}\""
+}

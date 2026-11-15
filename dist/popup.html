@@ -7,59 +7,69 @@
 </head>
 
 <body style="min-width:350px">
-    <h1>Latexicus</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Latexicus</h1>
+
+        <div>
+            <label id="language_dropdown" for="lang-select"></label>
+            <select id="lang-select">
+                <option value="fi">Suomi</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+    </div>
 
     <hr>
-    <h3 style="font-size: 1.2rem; margin-bottom: 0px;">Caveats</h3>
+    <h3 id="caveats_header" style="font-size: 1.2rem; margin-bottom: 0px;"></h3>
     <ul>
         <li>sin 50 ❌</li>
         <li>sin(50) ✅</li>
     </ul>
 
     <hr>
-    <h3>Settings</h3>
+    <h3 id="settings_header"></h3>
     <div class="settings">
         <div>
-            <label for="remove-characters"><h4>Remove characters</h4><span>Strips certain characters from parts of equations.<br>Example: 5N*8kg -> 5*8</span></label>
+            <label for="remove-characters"><h4 id="remove_char_settings_h"></h4><span id="remove_char_settings_d"></span></label>
             <input id="remove-characters" type="checkbox">
         </div>
         <div>
-            <label for="hide-green-dot"><h4>Hide the green dot in the top left corner</h4></label>
+            <label for="hide-green-dot"><h4 id="green_dot_settings_h"></h4><span id="green_dot_settings_d"></span></label>
             <input id="hide-green-dot" type="checkbox">
         </div>
         <div>
             <label style="width: 250px;" for="equals-strategy">
-                <h4>Equals removal strategy</h4>
-                <span>
-                    Changes how the program handles the equals (=) sign in statements.
+                <h4 id="equals_remove_settings_h"></h4>
+                <span id="equals_remove_settings_d">
                 </span>
             </label>
             <span>
-                Current strategy of 
+                <span id="equals_remove_settings_exp1"></span>
                 <select id="equals-strategy">
-                    <option selected value="left">Left side as input</option>
-                    <option value="right">Right side as input</option>
-                    <option value="longer">Longer side as input</option>
+                    <option id="equals_remove_settings_opt_l" selected value="left">Left side as input</option>
+                    <option id="equals_remove_settings_opt_r" value="right">Right side as input</option>
+                    <option id="equals_remove_settings_opt_longer" value="longer">Longer side as input</option>
                 </select>:<br>
-                120*2=240
+                120*2*3=240*2
                 <br>
-                <b>Processed as: <span id="processed-result">120*2</span></b>
+                <b><span id="equals_remove_settings_exp2"></span><span id="processed-result">120*2*3</span></b>
             </span>
 
         </div>
     </div>
 
     <hr>
-    <h3>Submit feedback</h3>
-    <p>Email me at latexicus@ctih1.fi to report any issues! :3</p>
+    <h3 id="submit_feedback"></h3>
+    <p id="support_email"></p>
 
     <hr>
-    <h4 style="margin-bottom: 0px;">Special thanks to:</h4>
+    <h4 id="special_thanks" style="margin-bottom: 0px;"></h4>
     <ul >
         <li><a href="https://github.com/escherpad/latex-parser">escherpad's latex-parser</a></li>
     </ul>
 
-    <script src="popup.js"></script>
+    <script src="popup-bundle.js"></script>
 </body>
 
 
@@ -75,6 +85,8 @@
         align-items: center;
         column-gap: 12px;
         margin-bottom: 12px;
+        justify-content: space-between;
+        margin-right: 24px;
     }
     .settings div label h4 {
         margin: 0px;

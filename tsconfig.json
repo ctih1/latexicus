@@ -1,6 +1,9 @@
 {
   "include": ["src/*.ts"],
   "compilerOptions": {
+      "module": "NodeNext",
+      "moduleResolution": "nodenext",
+      "resolveJsonModule": true,
       "lib": ["dom", "ES2022", "ES5"],
       "types": ["chrome"],
       "sourceMap": true,

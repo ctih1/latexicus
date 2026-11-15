@@ -1,5 +1,6 @@
 import { latexParser } from "latex-parser";
 import { showNotification } from "./ui";
+import { t } from "./localization";
 
 interface FuckedArg {
     type: string;
@@ -60,12 +61,12 @@ export function needsMultiplication(
     return false;
 }
 
-export function convertToString(
+export async function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
     tokenTree: FuckedToken[] = [],
     options: Options = {}
-): string {
+): Promise<string> {
     console.log(
         `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
     );
@@ -101,7 +102,7 @@ export function convertToString(
                     let tempResult = "";
 
                     for (let j = 0; j < arg.latex.length; j++) {
-                        tempResult += convertToString(
+                        tempResult += await convertToString(
                             arg.latex[j] as FuckedToken,
                             token,
                             [...tokenTree, token],
@@ -126,7 +127,7 @@ export function convertToString(
                     if (arg.type === "OptArg") {
                         nthRoot = arg.latex[0].text!;
                     } else {
-                        value = convertToString(
+                        value = await convertToString(
                             arg.latex[0] as FuckedToken,
                             token,
                             [...tokenTree, token],
@@ -155,7 +156,11 @@ export function convertToString(
             }
 
             default: {
-                showNotification(`Unrecognized token "${token.name}"`, 8000, "error");
+                showNotification(
+                    await t("notification_unrecogn_token", { token: token.name! }),
+                    8000,
+                    "error"
+                );
                 break;
             }
         }
@@ -168,7 +173,7 @@ export function convertToString(
     return output;
 }
 
-export function parseEntireCalculation(calc: string, options: Options = {}): string {
+export async function parseEntireCalculation(calc: string, options: Options = {}): Promise<string> {
     let lastToken: FuckedToken | undefined = undefined;
     let output = "";
     for (const token of latexParser
@@ -185,7 +190,7 @@ export function parseEntireCalculation(calc: string, options: Options = {}): str
                 .replaceAll(" ", "")
         )
         .value!.flat(Infinity)) {
-        output += convertToString(token as FuckedToken, lastToken, undefined, options);
+        output += await convertToString(token as FuckedToken, lastToken, undefined, options);
         lastToken = token as FuckedToken;
     }
 
