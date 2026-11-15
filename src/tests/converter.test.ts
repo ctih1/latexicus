@@ -7,7 +7,7 @@ import {
     parseEntireCalculation
 } from "../converter";
 
-test("basic multiplication detection with numbers", () => {
+test("basic multiplication detection with numbers", async () => {
     let tokens: FuckedToken[] = latexParser.parse("4+2").value as FuckedToken[];
     expect(needsMultiplication(tokens[0], undefined, "")).toBe(false);
 
@@ -18,7 +18,7 @@ test("basic multiplication detection with numbers", () => {
     expect(needsMultiplication(tokens[1], tokens[0], "")).toBe(true);
 });
 
-test("basic multiplication detection with division", () => {
+test("basic multiplication detection with division", async () => {
     let tokens: FuckedToken[] = latexParser.parse("\\frac{4}{8}\\pi").value as FuckedToken[];
     expect(needsMultiplication(tokens[1], tokens[0], "")).toBe(true);
     tokens = latexParser.parse("\\frac{4}{8}+8").value as FuckedToken[];
@@ -27,7 +27,7 @@ test("basic multiplication detection with division", () => {
     expect(needsMultiplication(tokens[1], tokens[0], "")).toBe(false);
 });
 
-test("multiplication detection with two functions", () => {
+test("multiplication detection with two functions", async () => {
     let tokens = latexParser.parse("\\sin (50)\\sin(20)").value as FuckedToken[];
     expect(needsMultiplication(tokens[1], tokens[0], "")).toBe(false);
     expect(needsMultiplication(tokens[2], tokens[1], "")).toBe(true);
@@ -35,77 +35,91 @@ test("multiplication detection with two functions", () => {
     expect(needsMultiplication(tokens[2], tokens[1], "")).toBe(false);
 });
 
-test("simple division", () => {
-    expect(parseEntireCalculation("\\frac{4}{8}")).toBe("(4/8)");
+test("simple division", async () => {
+    expect(await parseEntireCalculation("\\frac{4}{8}")).toBe("(4/8)");
 });
 
-test("nested division", () => {
-    expect(parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{8}}")).toBe("(((4/8))/((4/8)))");
-    expect(parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{\\frac{4}{8}}}")).toBe(
+test("nested division", async () => {
+    expect(await parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{8}}")).toBe(
+        "(((4/8))/((4/8)))"
+    );
+    expect(await parseEntireCalculation("\\frac{\\frac{4}{8}}{\\frac{4}{\\frac{4}{8}}}")).toBe(
         "(((4/8))/((4/((4/8)))))"
     );
 
-    expect(parseEntireCalculation("\\frac{1}{5\\cdot \\frac{1}{1{,}5}}")).toBe("(1/(5*(1/1.5)))");
-});
-
-test("division with multiplication", () => {
-    expect(parseEntireCalculation("\\frac{4}{8}\\pi")).toBe("(4/8)*pi");
-});
-
-test("division with inner functions", () => {
-    expect(parseEntireCalculation("\\frac{\\frac{2}{8}}{Pi\\cdot8}")).toBe("(((2/8))/(pi*8))");
-});
-
-test("simple multiplication", () => {
-    expect(parseEntireCalculation("8\\cdot8")).toBe("8*8");
-    expect(parseEntireCalculation("-8\\cdot8")).toBe("-8*8");
-});
-
-test("multiplication with functions on one side", () => {
-    expect(parseEntireCalculation("52\\sin(52)")).toBe("52*sin(52)");
-    expect(parseEntireCalculation("(52\\cdot52)\\sin(52)")).toBe("(52*52)*sin(52)");
-    expect(parseEntireCalculation("\\frac{52}{52}\\sin(52)")).toBe("(52/52)*sin(52)");
-    expect(parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")).toBe(
-        "sin(50)*cos(20)"
+    expect(await parseEntireCalculation("\\frac{1}{5\\cdot \\frac{1}{1{,}5}}")).toBe(
+        "(1/(5*(1/1.5)))"
     );
-    expect(parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")).toBe(
-        "sin(50)*cos(20)"
+});
+
+test("division with multiplication", async () => {
+    expect(await parseEntireCalculation("\\frac{4}{8}\\pi")).toBe("(4/8)*pi");
+});
+
+test("division with inner functions", async () => {
+    expect(await parseEntireCalculation("\\frac{\\frac{2}{8}}{Pi\\cdot8}")).toBe(
+        "(((2/8))/(pi*8))"
     );
+});
+
+test("simple multiplication", async () => {
+    expect(await parseEntireCalculation("8\\cdot8")).toBe("8*8");
+    expect(await parseEntireCalculation("-8\\cdot8")).toBe("-8*8");
+});
+
+test("multiplication with functions on one side", async () => {
+    expect(await parseEntireCalculation("52\\sin(52)")).toBe("52*sin(52)");
+    expect(await parseEntireCalculation("(52\\cdot52)\\sin(52)")).toBe("(52*52)*sin(52)");
+    expect(await parseEntireCalculation("\\frac{52}{52}\\sin(52)")).toBe("(52/52)*sin(52)");
+    expect(
+        await parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")
+    ).toBe("sin(50)*cos(20)");
+    expect(
+        await parseEntireCalculation("\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)")
+    ).toBe("sin(50)*cos(20)");
 
     expect(
-        parseEntireCalculation(
+        await parseEntireCalculation(
             "5+\\left(\\sin \\left(50\\right)\\cdot \\cos \\left(20\\right)\\right)"
         )
     ).toBe("5+(sin(50)*cos(20))");
 });
 
-test("multiplication with functions on both sides", () => {
+test("multiplication with functions on both sides", async () => {
     expect(
-        parseEntireCalculation("\\sin \\left(50\\right)\\sin \\left(20\\right)").replaceAll(" ", "")
+        (await parseEntireCalculation("\\sin \\left(50\\right)\\sin \\left(20\\right)")).replaceAll(
+            " ",
+            ""
+        )
     ).toBe("sin(50)*sin(20)");
 });
 
-test("exponents", () => {
-    expect(parseEntireCalculation("2^2")).toBe("2^2");
-    expect(parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
-    expect(parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
+test("exponents", async () => {
+    expect(await parseEntireCalculation("2^2")).toBe("2^2");
+    expect(await parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
+    expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
 });
 
-test("sqrt", () => {
-    expect(parseEntireCalculation("\\sqrt{25}")).toBe("√(25;2)");
-    expect(parseEntireCalculation("\\sqrt[3]{100}")).toBe("√(100;3)");
-    expect(parseEntireCalculation("8\\sqrt{8}")).toBe("8*√(8;2)");
-    expect(parseEntireCalculation("\\sqrt{2}^2")).toBe("√(2;2)^2");
+test("sqrt", async () => {
+    expect(await parseEntireCalculation("\\sqrt{25}")).toBe("√(25;2)");
+    expect(await parseEntireCalculation("\\sqrt[3]{100}")).toBe("√(100;3)");
+    expect(await parseEntireCalculation("8\\sqrt{8}")).toBe("8*√(8;2)");
+    expect(await parseEntireCalculation("\\sqrt{2}^2")).toBe("√(2;2)^2");
 });
 
 // more advanced factorials arent supported yet, aka like (5-2)!
-test("simple factorial", () => {
-    expect(parseEntireCalculation("5!")).toBe("5*4*3*2*1");
-    expect(parseEntireCalculation("8!")).toBe("8*7*6*5*4*3*2*1");
+test("simple factorial", async () => {
+    expect(await parseEntireCalculation("5!")).toBe("5*4*3*2*1");
+    expect(await parseEntireCalculation("8!")).toBe("8*7*6*5*4*3*2*1");
 });
 
-test("test stripping letters", () => {
-    expect(parseEntireCalculation("5N\\cdot8kg", { stripLetters: true })).toBe("5*8");
-    expect(parseEntireCalculation("5\\cdot8kg", { stripLetters: true })).toBe("5*8");
-    expect(parseEntireCalculation("5Pi", { stripLetters: true })).toBe("5*pi");
+test("test stripping letters", async () => {
+    expect(await parseEntireCalculation("5N\\cdot8kg", { stripLetters: true })).toBe("5*8");
+    expect(await parseEntireCalculation("5\\cdot8kg", { stripLetters: true })).toBe("5*8");
+    expect(await parseEntireCalculation("5Pi", { stripLetters: true })).toBe("5*pi");
+});
+
+test("functions that require parenthesis", async () => {
+    expect(await parseEntireCalculation("\\sin(50)")).toBe("sin(50)");
+    expect(await parseEntireCalculation("\\sin(50)", { stripLetters: true })).toBe("sin(50)");
 });

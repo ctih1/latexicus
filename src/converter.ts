@@ -75,8 +75,9 @@ export async function convertToString(
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     if (token.type === "TeXRaw") {
-        if (options.stripLetters) {
-            token.text = /([0-9]+)[A-Za-z]*/.exec(token.text!)![1];
+        const stripLettersRegex = /([0-9]+)[A-Za-z]+/;
+        if (options.stripLetters && stripLettersRegex.test(token.text!)) {
+            token.text = stripLettersRegex.exec(token.text!)![1];
         }
 
         const value = Number(token.text!.replace("!", ""));
