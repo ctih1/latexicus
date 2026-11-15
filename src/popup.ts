@@ -72,7 +72,7 @@ const currentLanguageElement: HTMLInputElement = document.getElementById(
     "lang-select"
 ) as HTMLInputElement;
 
-currentLanguageElement.addEventListener("change", _ => localizeAll());
+currentLanguageElement.addEventListener("change", async _ => await localizeAll());
 
 initializeSettings().then(_ => {
     localizeAll();

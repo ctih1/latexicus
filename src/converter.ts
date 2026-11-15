@@ -7,6 +7,8 @@ interface FuckedArg {
     latex: { text?: string; latex?: string; arguments?: FuckedArg[]; type: string }[];
 }
 
+const funcsWithParenthesis = ["sin", "cos", "tan", "arcsin", "arccos", "arctan"];
+
 export interface Options {
     stripLetters?: boolean;
 }
@@ -24,9 +26,6 @@ export function needsMultiplication(
     currentOutput: string,
     tokenTree: FuckedToken[] = []
 ): boolean {
-    // console.log(
-    //     `Comma: ${last?.name || last?.text}=${last?.type}|${current.name || current.text}=${current.type};${currentOutput}`
-    // );
     if (!last) return false;
     if (currentOutput.trimEnd().endsWith("*") || currentOutput.trimEnd().endsWith("(")) {
         return false;
@@ -46,11 +45,13 @@ export function needsMultiplication(
     if (last.type === "TeXRaw") {
         if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
             return false;
+
         console.log("allowign comma");
         if (!!Number(last.text)) return true;
         if (current.type === "TeXComm") return true;
     } else if (last.type === "TeXComm") {
         if (current.type === "TeXComm") {
+            if (funcsWithParenthesis.includes(last.name!)) return false;
             if (last.name === "frac" && current.name === "frac") return false;
             console.log("allowign comma");
 
@@ -68,7 +69,7 @@ export async function convertToString(
     options: Options = {}
 ): Promise<string> {
     console.log(
-        `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
+        `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text}=${token.type} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
     );
     let output = "";
 
@@ -78,6 +79,14 @@ export async function convertToString(
         const stripLettersRegex = /([0-9]+)[A-Za-z]+/;
         if (options.stripLetters && stripLettersRegex.test(token.text!)) {
             token.text = stripLettersRegex.exec(token.text!)![1];
+        }
+
+        if (
+            previousToken &&
+            funcsWithParenthesis.includes(previousToken.name || "") &&
+            !token.text!.startsWith("(")
+        ) {
+            token.text = "(" + token.text + ")";
         }
 
         const value = Number(token.text!.replace("!", ""));

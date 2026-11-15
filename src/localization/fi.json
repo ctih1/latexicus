@@ -3,7 +3,7 @@
     "caveats_header": "Huom.",
     "settings_header": "Asetukset",
     "remove_char_settings_h": "Poista turhat merkit",
-    "remove_char_settings_d": "Poistaa tietyt merkit laskuista.<br>Esimerkiksi: 5N*8kg -> 5*8",
+    "remove_char_settings_d": "Poistaa tietyt merkit laskuista.<br>Esimerkiksi: 5kmh*8h -> 5*8",
     "green_dot_settings_h": "Piilota vihreä pallo vasemmasta yläkulmasta.",
     "green_dot_settings_d": "Piilottaa pienen vihreän merkkivalon vasemmassa yläkulmassa, joka kertoo, että Latexicus on ladattu. ",
     "equals_remove_settings_h": "Yhtäsuuruusmerkin poistostrategia",
@@ -19,5 +19,7 @@
     "notification_loaded": "Latexicus ladattu",
     "notification_converted": "Muuntaminen onnistui",
     "notification_sincos_error": "Huomattiin sin/cos/tan ilman sulkeita. Tämä voi tuottaa ongelmia.",
-    "notification_unrecogn_token": "Tunnistamaton token \"{token}\""
+    "notification_unrecogn_token": "Tunnistamaton token \"{token}\"",
+    "caveat_beta": "Latexicus on betassa, ja voi mahdollisesti antaa vääriä tuloksia. Tee bugireportti näistä!",
+    "caveat_tested": "Latexicusia on testattu ainoastaan Novan ja Sanomapron tuottamalla LaTeXilla."
 }

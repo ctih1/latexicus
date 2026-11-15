@@ -3,7 +3,7 @@
     "caveats_header": "Caveats",
     "settings_header": "Settings",
     "remove_char_settings_h": "Remove characters",
-    "remove_char_settings_d": "Strips certain characters from parts of equations.<br>Example: 5N*8kg -> 5*8",
+    "remove_char_settings_d": "Strips certain characters from parts of equations.<br>Example: 5kmh*8h -> 5*8",
     "green_dot_settings_h": "Hide the green dot in the top left corner",
     "green_dot_settings_d": "Hides the little green dot in the top left corner letting you know that Latexicus loaded successfully",
     "equals_remove_settings_h": "Equals removal strategy",
@@ -18,6 +18,8 @@
     "special_thanks": "Special thanks to:",
     "notification_loaded": "Loaded Latexicus!",
     "notification_converted": "Successfully converted!",
-    "notification_sincos_error": "Detected sin/cos/tan without parenthesis. This will produce unexpected results",
-    "notification_unrecogn_token": "Unrecognized token \"{token}\""
+    "notification_sincos_error": "Detected sin/cos/tan without parenthesis. This may produce unexpected results",
+    "notification_unrecogn_token": "Unrecognized token \"{token}\"",
+    "caveat_beta": "Latexicus is in beta, and may produce mistakes. Report these!",
+    "caveat_tested": "Latexicus has only been tested with Nova and Sanomapro's LaTeX implementations."
 }

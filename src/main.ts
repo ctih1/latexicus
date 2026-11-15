@@ -49,7 +49,7 @@ if (window) {
 
             document.execCommand("insertText", false, convertedText);
 
-            if (/(sin|cos|tan)[0-9]+/.test(text)) {
+            if (/(sin|cos|tan)[0-9]+/.test(text) && false) {
                 showNotification(await t("notification_sincos_error"), 15000, "error");
             } else {
                 showNotification(await t("notification_converted"), 4000);
