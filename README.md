@@ -1,4 +1,3 @@
-
 # ![latexicus logo](assets/logo32.png) Latexicus
 
 Adds functionality to allow directly pasting Latex into Abicus. Please note that the goal of this project is to **provide quality-of-life improvements** to Abicus, and **NOT** to make it more capable in any way. Abicus is meant to be a calculator, and nothing more. It should not be able to solve equations (such as x^2=4) automatically.
@@ -20,12 +19,15 @@ npm install
 
 To build into `dist`: `npm run build`
 
+To build the popup script: `npm run build:popup`
+
+To build the content script: `npm run build:latexicus`
+
 To run tests: `npm run test`
 
 To package into a zip: `npm run package`
 
 To update the version number: `python3 update_version.py`
-
 
 &nbsp;
 &nbsp;
