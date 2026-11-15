@@ -1,6 +1,7 @@
+import { t } from "./localization";
+
 const VERSION="0.1.0";
 
-const VERSION = "0.0.8";
 try {
     window;
     var isBrowser = true;
