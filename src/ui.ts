@@ -1,4 +1,4 @@
-import { t } from "./localization";
+const VERSION="0.1.0";
 
 const VERSION = "0.0.8";
 try {
@@ -7,6 +7,25 @@ try {
 } catch (e) {
     var isBrowser = false;
 }
+
+async function submitReport(currentLatex: string, output: string): Promise<boolean> {
+    const res = await fetch("https://ctih1.fi/api/latexicus", {
+        method: "POST",
+        body: JSON.stringify({
+            latexText: currentLatex,
+            outputText: output,
+            latexicusVersion: VERSION
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!res.ok) return false;
+
+    return (await res.json()).ok;
+}
+
 if (isBrowser) {
     var dismissNotifButton: HTMLButtonElement = document.createElement("button");
     dismissNotifButton.innerHTML = "Clear all";
@@ -23,14 +42,26 @@ if (isBrowser) {
         console.log("Creating report section");
         document.body.style = "position: relative";
         var reportSection: HTMLDivElement = document.createElement("div");
+        reportSection.id = "report-section";
         reportSection.style =
-            "position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; font-size: 0.8rem;";
+            "position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: none; flex-direction: column; font-size: 0.8rem;";
         reportSection.innerHTML = `
     <p style="text-align: center">${await t("noticed_error_label")}</p>
-    <button class="key transition-all bg-blue-light border-blue-border text-black" style="height: 40px; border-radius: var(--radius-sm); padding: 8px" id="report">${await t("send_error_button")}</button>
+    <button id="report-submit" class="key transition-all bg-blue-light border-blue-border text-black" style="height: 40px; border-radius: var(--radius-sm); padding: 8px" id="report">${await t("send_error_button")}</button>
     <p class="text-neutral-400" style="font-size: 0.7rem;">${await t("send_error_button_clarification")}</p>
     `;
         document.getElementById("root")!.appendChild(reportSection);
+        document.getElementById("report-submit")?.addEventListener("click", async _ => {
+            const status = await submitReport(
+                document.body.dataset.latexicusInput!,
+                document.body.dataset.latexicusOutput!
+            );
+            if (status) {
+                showNotification(await t("send_error_request_sent"), 6000);
+            } else {
+                showNotification(await t("send_error_request_fail"), 12000, "error");
+            }
+        });
     })();
 }
 

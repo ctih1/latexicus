@@ -8,6 +8,8 @@ if (window) {
         showNotification(await t("notification_loaded"), 3000);
         addLatexicusIndicator();
         addEventListener("paste", async e => {
+            document.getElementById("report-section")!.style.display = "none";
+
             if (!e.clipboardData) {
                 return;
             }
@@ -48,6 +50,13 @@ if (window) {
             mathInput.focus();
 
             document.execCommand("insertText", false, convertedText);
+
+            document.body.dataset.latexicusInput = text;
+            document.body.dataset.latexicusOutput = convertedText;
+
+            setTimeout(() => {
+                document.getElementById("report-section")!.style.display = "flex";
+            }, 250);
 
             if (/(sin|cos|tan)[0-9]+/.test(text) && false) {
                 showNotification(await t("notification_sincos_error"), 15000, "error");

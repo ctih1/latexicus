@@ -26,5 +26,7 @@
     "send_error_button": "Lähetä tarkistettavaksi",
     "send_error_button_clarification": "Kirjautumista ei vaadita, raportti lähetetään anonyymisesti.",
     "hide_error_prompt_h": "Piilota virheen ilmoitus",
-    "hide_error_prompt_d": "Piilottaa pienen virheilmoitus-näppäimen näytön alareunasta."
+    "hide_error_prompt_d": "Piilottaa pienen virheilmoitus-näppäimen näytön alareunasta.",
+    "send_error_request_sent": "Raportti lähetetty.",
+    "send_error_request_fail": "Raportin lähetys epäonnistui."
 }
