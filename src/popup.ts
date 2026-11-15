@@ -1,6 +1,12 @@
 import { localizeAll } from "./localization";
 
-const SETTING_IDS = ["remove-characters", "hide-green-dot", "equals-strategy", "lang-select"];
+const SETTING_IDS = [
+    "remove-characters",
+    "hide-green-dot",
+    "equals-strategy",
+    "lang-select",
+    "hide-error-prompt"
+];
 
 const DEFAULT_VALUES: { [key: string]: string } = {
     "equals-strategy": "left",

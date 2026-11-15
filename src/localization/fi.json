@@ -21,5 +21,10 @@
     "notification_sincos_error": "Huomattiin sin/cos/tan ilman sulkeita. Tämä voi tuottaa ongelmia.",
     "notification_unrecogn_token": "Tunnistamaton token \"{token}\"",
     "caveat_beta": "Latexicus on betassa, ja voi mahdollisesti antaa vääriä tuloksia. Tee bugireportti näistä!",
-    "caveat_tested": "Latexicusia on testattu ainoastaan Novan ja Sanomapron tuottamalla LaTeXilla."
+    "caveat_tested": "Latexicusia on testattu ainoastaan Novan ja Sanomapron tuottamalla LaTeXilla.",
+    "noticed_error_label": "Virhe vastauksessa?",
+    "send_error_button": "Lähetä tarkistettavaksi",
+    "send_error_button_clarification": "Kirjautumista ei vaadita, raportti lähetetään anonyymisesti.",
+    "hide_error_prompt_h": "Piilota virheen ilmoitus",
+    "hide_error_prompt_d": "Piilottaa pienen virheilmoitus-näppäimen näytön alareunasta."
 }

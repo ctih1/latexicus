@@ -21,5 +21,10 @@
     "notification_sincos_error": "Detected sin/cos/tan without parenthesis. This may produce unexpected results",
     "notification_unrecogn_token": "Unrecognized token \"{token}\"",
     "caveat_beta": "Latexicus is in beta, and may produce mistakes. Report these!",
-    "caveat_tested": "Latexicus has only been tested with Nova and Sanomapro's LaTeX implementations."
+    "caveat_tested": "Latexicus has only been tested with Nova and Sanomapro's LaTeX implementations.",
+    "noticed_error_label": "Error in the output?",
+    "send_error_button": "Send sample",
+    "send_error_button_clarification": "No sign-in required, report will be sent anonymously.",
+    "hide_error_prompt_h": "Hide error prompt",
+    "hide_error_prompt_d": "Hides the small error reporting box at the bottom of the screen."
 }

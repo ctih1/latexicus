@@ -1,4 +1,6 @@
-const VERSION="0.0.8";
+import { t } from "./localization";
+
+const VERSION = "0.0.8";
 try {
     window;
     var isBrowser = true;
@@ -13,6 +15,23 @@ if (isBrowser) {
     dismissNotifButton.style.width = "100%";
     dismissNotifButton.style.marginTop = "12px";
     dismissNotifButton.onclick = _ => clearNotificationBox();
+
+    (async () => {
+        if ((await browser.storage.sync.get("hide-error-prompt"))["hide-error-prompt"]) {
+            return;
+        }
+        console.log("Creating report section");
+        document.body.style = "position: relative";
+        var reportSection: HTMLDivElement = document.createElement("div");
+        reportSection.style =
+            "position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; font-size: 0.8rem;";
+        reportSection.innerHTML = `
+    <p style="text-align: center">${await t("noticed_error_label")}</p>
+    <button class="key transition-all bg-blue-light border-blue-border text-black" style="height: 40px; border-radius: var(--radius-sm); padding: 8px" id="report">${await t("send_error_button")}</button>
+    <p class="text-neutral-400" style="font-size: 0.7rem;">${await t("send_error_button_clarification")}</p>
+    `;
+        document.getElementById("root")!.appendChild(reportSection);
+    })();
 }
 
 function initNotifBox(): HTMLDivElement {
@@ -123,6 +142,8 @@ function clearNotificationBox() {
 
     handleButtonVisibility();
 }
+
+export function showReportButton() {}
 
 // https://stackoverflow.com/questions/1349404/generate-a-string-of-random-characters
 function randomString(length: number): string {
