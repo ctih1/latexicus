@@ -7,7 +7,7 @@ interface FuckedArg {
     latex: { text?: string; latex?: string; arguments?: FuckedArg[]; type: string }[];
 }
 
-const funcsWithParenthesis = ["sin", "cos", "tan", "arcsin", "arccos", "arctan"];
+const funcsWithParenthesis = ["sin", "cos", "tan", "arcsin", "arccos", "arctan", "log", "ln"];
 
 export interface Options {
     stripLetters?: boolean;
@@ -26,34 +26,45 @@ export function needsMultiplication(
     currentOutput: string,
     tokenTree: FuckedToken[] = []
 ): boolean {
-    if (!last) return false;
+    console.log(
+        `|${"----".repeat(tokenTree.length)}+ ${current.name || current.text}=${current.type} (prev: ${last?.name || last?.text}=${last?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
+    );
+    if (!last) {
+        console.debug("Last token not set, denying *");
+        return false;
+    }
     if (currentOutput.trimEnd().endsWith("*") || currentOutput.trimEnd().endsWith("(")) {
+        console.debug("Current output already has * or ends with (");
         return false;
     }
 
     const targetCurrentText = current.name || current.text!;
     const targetPrevText = last.name || last.text!;
-    if (targetCurrentText.endsWith(")")) return false;
-    if (targetPrevText.endsWith("(")) return false;
-
-    if (tokenTree.at(-1)?.name === "frac") {
+    if (targetCurrentText.endsWith(")")) {
+        console.debug("Current target endswith )");
         return false;
     }
-    if (last.type === "TeXComm") {
-        if (last.name === "cdot") return false;
+    if (targetPrevText.endsWith("(")) return false;
+
+    if (last.name === "frac" && tokenTree.at(-1)?.name === "frac") {
+        console.debug("Inside fraction, denying *");
+        return false;
     }
+
     if (last.type === "TeXRaw") {
         if (last.text!.endsWith("+") || last.text!.endsWith("-") || last.text!.endsWith("^"))
             return false;
 
-        console.log("allowign comma");
+        console.log("allowing comma texraw");
         if (!!Number(last.text)) return true;
         if (current.type === "TeXComm") return true;
     } else if (last.type === "TeXComm") {
+        if (last.name === "cdot") return false;
         if (current.type === "TeXComm") {
             if (funcsWithParenthesis.includes(last.name!)) return false;
+            if (tokenTree.at(-1)?.name === "sqrt") return false;
             if (last.name === "frac" && current.name === "frac") return false;
-            console.log("allowign comma");
+            console.log("allowing comma texcomm");
 
             return true;
         }
@@ -67,10 +78,10 @@ export async function convertToString(
     previousToken: FuckedToken | undefined,
     tokenTree: FuckedToken[] = [],
     options: Options = {}
-): Promise<string> {
-    console.log(
-        `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text}=${token.type} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
-    );
+): Promise<[string, FuckedToken]> {
+    // console.log(
+    //     `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text}=${token.type} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
+    // );
     let output = "";
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
@@ -78,8 +89,8 @@ export async function convertToString(
     if (token.type === "TeXRaw") {
         const stripLettersRegex = /([0-9]+)[A-Za-z]+(.*)/;
         if (options.stripLetters && stripLettersRegex.test(token.text!)) {
-            const result = stripLettersRegex.exec(token.text!)! 
-            token.text = result[1]+result[2];
+            const result = stripLettersRegex.exec(token.text!)!;
+            token.text = result[1] + result[2];
         }
 
         if (
@@ -111,14 +122,17 @@ export async function convertToString(
                 for (let i = 0; i < token.arguments.length; i++) {
                     const arg = token.arguments[i];
                     let tempResult = "";
+                    let lastToken = undefined;
 
                     for (let j = 0; j < arg.latex.length; j++) {
-                        tempResult += await convertToString(
+                        const [value, parsedToken] = await convertToString(
                             arg.latex[j] as FuckedToken,
-                            token,
+                            lastToken || token,
                             [...tokenTree, token],
                             options
                         );
+                        tempResult += value;
+                        lastToken = parsedToken;
                     }
                     if (/[\*\-\+\/]/.test(tempResult)) {
                         tempResult = `(${tempResult})`;
@@ -132,18 +146,23 @@ export async function convertToString(
             }
             case "sqrt": {
                 let nthRoot = "2";
-                let value = undefined;
+                let value = "";
+                let lastToken = undefined;
 
                 for (const arg of token.arguments) {
                     if (arg.type === "OptArg") {
                         nthRoot = arg.latex[0].text!;
                     } else {
-                        value = await convertToString(
-                            arg.latex[0] as FuckedToken,
-                            token,
-                            [...tokenTree, token],
-                            options
-                        );
+                        for (const secondArg of arg.latex) {
+                            const [parsedValue, parsedToken] = await convertToString(
+                                secondArg as FuckedToken,
+                                lastToken || token,
+                                [...tokenTree, token],
+                                options
+                            );
+                            lastToken = parsedToken;
+                            value += parsedValue;
+                        }
                     }
                 }
 
@@ -181,7 +200,7 @@ export async function convertToString(
         output = "*" + output;
     }
 
-    return output;
+    return [output, token];
 }
 
 export async function parseEntireCalculation(calc: string, options: Options = {}): Promise<string> {
@@ -201,7 +220,14 @@ export async function parseEntireCalculation(calc: string, options: Options = {}
                 .replaceAll(" ", "")
         )
         .value!.flat(Infinity)) {
-        output += await convertToString(token as FuckedToken, lastToken, undefined, options);
+        const [val, parsedToken] = await convertToString(
+            token as FuckedToken,
+            lastToken,
+            undefined,
+            options
+        );
+        lastToken = parsedToken;
+        output += val;
         lastToken = token as FuckedToken;
     }
 

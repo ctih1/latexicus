@@ -50,6 +50,10 @@ test("nested division", async () => {
     expect(await parseEntireCalculation("\\frac{1}{5\\cdot \\frac{1}{1{,}5}}")).toBe(
         "(1/(5*(1/1.5)))"
     );
+
+    expect(await parseEntireCalculation("\\frac{1}{1\\cdot \\frac{1}{8Pi}}")).toBe(
+        "(1/(1*(1/(8*pi))))"
+    );
 });
 
 test("division with multiplication", async () => {
@@ -101,11 +105,19 @@ test("exponents", async () => {
     expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
 });
 
-test("sqrt", async () => {
+test("basic sqrt", async () => {
     expect(await parseEntireCalculation("\\sqrt{25}")).toBe("√(25;2)");
     expect(await parseEntireCalculation("\\sqrt[3]{100}")).toBe("√(100;3)");
     expect(await parseEntireCalculation("8\\sqrt{8}")).toBe("8*√(8;2)");
     expect(await parseEntireCalculation("\\sqrt{2}^2")).toBe("√(2;2)^2");
+});
+
+test("sqrt with nested values", async () => {
+    expect(await parseEntireCalculation("\\sqrt{\\frac{100}{4}}")).toBe("√((100/4);2)");
+    expect(await parseEntireCalculation("\\sqrt{\\frac{100\\cdot8}{4}}")).toBe("√(((100*8)/4);2)");
+    expect(await parseEntireCalculation("\\sqrt{2{,}5\\cdot10}")).toBe("√(2.5*10;2)");
+    expect(await parseEntireCalculation("\\sqrt{8}\\cdot5")).toBe("√(8;2)*5");
+    expect(await parseEntireCalculation("\\sqrt{\\frac{100}{4}}\\cdot8")).toBe("√((100/4);2)*8");
 });
 
 // more advanced factorials arent supported yet, aka like (5-2)!
