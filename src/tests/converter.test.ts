@@ -65,6 +65,7 @@ test("division with inner functions", async () => {
 test("simple multiplication", async () => {
     expect(await parseEntireCalculation("8\\cdot8")).toBe("8*8");
     expect(await parseEntireCalculation("-8\\cdot8")).toBe("-8*8");
+    expect(await parseEntireCalculation("-8\\cdot-8")).toBe("-8*-8");
 });
 
 test("multiplication with functions on one side", async () => {

@@ -29,5 +29,6 @@
     "hide_error_prompt_d": "Hides the small error reporting box at the bottom of the screen.",
     "send_error_request_sent": "Report sent.",
     "send_error_request_fail": "Failed to send report.",
-    "notifications_clear_all": "Clear all"
+    "notifications_clear_all": "Clear all",
+    "send_error_button_loading": "Sending..."
 }

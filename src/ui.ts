@@ -1,6 +1,6 @@
 import { t } from "./localization";
 
-const VERSION="0.1.1";
+const VERSION = "0.1.1";
 
 try {
     window;
@@ -54,7 +54,10 @@ if (isBrowser) {
     <p class="text-neutral-400" style="font-size: 0.7rem;">${await t("send_error_button_clarification")}</p>
     `;
         document.getElementById("root")!.appendChild(reportSection);
-        document.getElementById("report-submit")?.addEventListener("click", async _ => {
+        const reportSubmitButton = document.getElementById("report-submit");
+        reportSubmitButton?.addEventListener("click", async _ => {
+            reportSubmitButton.innerText = await t("send_error_button_loading");
+            reportSubmitButton.setAttribute("disabled", "true");
             const status = await submitReport(
                 document.body.dataset.latexicusInput!,
                 document.body.dataset.latexicusOutput!
@@ -64,6 +67,8 @@ if (isBrowser) {
             } else {
                 showNotification(await t("send_error_request_fail"), 12000, "error");
             }
+            reportSubmitButton.removeAttribute("disabled");
+            reportSubmitButton.innerText = await t("send_error_button");
         });
     })();
 }

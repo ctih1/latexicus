@@ -29,5 +29,6 @@
     "hide_error_prompt_d": "Piilottaa pienen virheilmoitus-näppäimen näytön alareunasta.",
     "send_error_request_sent": "Raportti lähetetty.",
     "send_error_request_fail": "Raportin lähetys epäonnistui.",
-    "notifications_clear_all": "Tyhjennä viestit"
+    "notifications_clear_all": "Tyhjennä viestit",
+    "send_error_button_loading": "Lähetetään..."
 }
