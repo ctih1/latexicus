@@ -180,7 +180,9 @@ export async function convertToString(
             case "tan":
             case "arcsin":
             case "arccos":
-            case "arctan": {
+            case "arctan":
+            case "log":
+            case "ln": {
                 output += token.name;
                 break;
             }

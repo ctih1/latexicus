@@ -133,6 +133,11 @@ test("test stripping letters", async () => {
     expect(await parseEntireCalculation("5N\\cdot8kg^2", { stripLetters: true })).toBe("5*8^2");
 });
 
+test("logarithms", async () => {
+    expect(await parseEntireCalculation("\\log 20")).toBe("log(20)");
+    expect(await parseEntireCalculation("\\ln 20")).toBe("ln(20)");
+});
+
 test.each([["sin"], ["cos"], ["tan"], ["arcsin"], ["arccos"], ["arctan"]])(
     "functions that require parenthesis $0",
     async mathFunc => {
