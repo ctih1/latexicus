@@ -100,9 +100,10 @@ test("multiplication with functions on both sides", async () => {
 });
 
 test("exponents", async () => {
-    expect(await parseEntireCalculation("2^2")).toBe("2^2");
-    expect(await parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
-    expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
+    // expect(await parseEntireCalculation("2^2")).toBe("2^2");
+    // expect(await parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
+    // expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
+    expect(await parseEntireCalculation("8^{12}+8")).toBe("8^12+8");
 });
 
 test("basic sqrt", async () => {

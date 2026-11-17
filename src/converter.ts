@@ -37,6 +37,9 @@ export function needsMultiplication(
         console.debug("Current output already has * or ends with (");
         return false;
     }
+    if(/^(\+|\-|\*|\/)/.test(current.text||"")) {
+        return false;
+    }
 
     const targetCurrentText = current.name || current.text!;
     const targetPrevText = last.name || last.text!;
