@@ -1,6 +1,7 @@
 import { latexParser } from "latex-parser";
 import { showNotification } from "./ui";
 import { t } from "./localization";
+import { Parser } from "expr-eval";
 
 interface FuckedArg {
     type: string;
@@ -11,6 +12,7 @@ const funcsWithParenthesis = ["sin", "cos", "tan", "arcsin", "arccos", "arctan",
 
 export interface Options {
     stripLetters?: boolean;
+    allowBSectionTools?: boolean;
 }
 
 export interface FuckedToken {
@@ -104,12 +106,22 @@ export async function convertToString(
             token.text = "(" + token.text + ")";
         }
 
-        const value = Number(token.text!.replace("!", ""));
-        if (token.text?.endsWith("!") && !isNaN(value)) {
+        if (token.text?.includes("!") && options.allowBSectionTools) {
+            const [before, after, empty] = token.text!.split("!", 3);
+            console.log([before, after]);
+
+            const innerValue = await parseEntireCalculation(before, options);
+            const outerValue: string | undefined =
+                after.length >= 1
+                    ? await parseEntireCalculation(after + (empty ? "" : "!"), options)
+                    : undefined;
+
+            const value: number = Parser.evaluate(innerValue);
+
             for (let i = value; i > 0; i--) {
                 output += i + "*";
             }
-            output = output.slice(0, output.length - 1);
+            output = `${output.slice(0, output.length - 1)}${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}`;
         } else {
             output += token.text;
         }
@@ -187,6 +199,17 @@ export async function convertToString(
             case "log":
             case "ln": {
                 output += token.name;
+                break;
+            }
+
+            case "binom": {
+                // n=5, k=3
+                const firstArgN = token.arguments[0].latex[0];
+                const secondArgK = token.arguments[1].latex[0];
+                const transformedStatement = `\\frac{${firstArgN.text}!}{${secondArgK.text}!(${firstArgN.text}-${secondArgK.text})!}`;
+                console.log(transformedStatement);
+
+                output += await parseEntireCalculation(transformedStatement, options);
                 break;
             }
 
