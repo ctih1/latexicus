@@ -117,16 +117,22 @@ export async function convertToString(
 
         if (token.text?.includes("!") && options.allowBSectionTools) {
             const parts = breakupCalculation(token.text!);
+            console.log("parts:");
+            console.log(parts);
 
             let targetIndex = 0;
             let targetPart = "";
-            for (const [index, part] of parts.entries()) {
-                if (part.includes("!")) {
-                    targetIndex = index;
-                    targetPart = part;
-                    break;
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
+                if (!part.includes("!")) {
+                    continue;
                 }
+                targetIndex = i;
+                targetPart = part;
+                break;
             }
+
+            console.log(targetIndex, targetPart);
             const [before, after, empty] = targetPart.split("!", 3);
             console.log([before, after, empty]);
 
