@@ -132,6 +132,7 @@ test("test stripping letters", async () => {
     expect(await parseEntireCalculation("5\\cdot8kg", { stripLetters: true })).toBe("5*8");
     expect(await parseEntireCalculation("5Pi", { stripLetters: true })).toBe("5*pi");
     expect(await parseEntireCalculation("5N\\cdot8kg^2", { stripLetters: true })).toBe("5*8^2");
+    expect(await parseEntireCalculation("0{,}005kg", { stripLetters: true })).toBe("0.005");
 });
 
 test("logarithms", async () => {

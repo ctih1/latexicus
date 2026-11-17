@@ -37,7 +37,7 @@ export function needsMultiplication(
         console.debug("Current output already has * or ends with (");
         return false;
     }
-    if(/^(\+|\-|\*|\/)/.test(current.text||"")) {
+    if (/^(\+|\-|\*|\/)/.test(current.text || "")) {
         return false;
     }
 
@@ -90,7 +90,7 @@ export async function convertToString(
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
 
     if (token.type === "TeXRaw") {
-        const stripLettersRegex = /([0-9]+)[A-Za-z]+(.*)/;
+        const stripLettersRegex = /([0-9.]+)[A-Za-z]+(.*)/;
         if (options.stripLetters && stripLettersRegex.test(token.text!)) {
             const result = stripLettersRegex.exec(token.text!)!;
             token.text = result[1] + result[2];
