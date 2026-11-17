@@ -108,12 +108,15 @@ export async function convertToString(
 
         if (token.text?.includes("!") && options.allowBSectionTools) {
             const [before, after, empty] = token.text!.split("!", 3);
-            console.log([before, after]);
+            console.log([before, after, empty]);
 
             const innerValue = await parseEntireCalculation(before, options);
             const outerValue: string | undefined =
                 after.length >= 1
-                    ? await parseEntireCalculation(after + (empty ? "" : "!"), options)
+                    ? await parseEntireCalculation(
+                          after + (empty === undefined ? "" : "!"),
+                          options
+                      )
                     : undefined;
 
             const value: number = Parser.evaluate(innerValue);
