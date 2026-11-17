@@ -13,25 +13,27 @@ if (window) {
             if (!e.clipboardData) {
                 return;
             }
-            
-            
+
             let text = e.clipboardData.getData("text").replaceAll(" ", "");
 
             e.preventDefault();
 
-            if (!text.includes("\\") && !(await browser.storage.sync.get("always-convert"))["always-convert"]) {
+            const settings = await browser.storage.sync.get([
+                "always-convert",
+                "b-tools",
+                "remove-characters",
+                "equals-strategy"
+            ]);
+            if (!text.includes("\\") && !settings["always-convert"]) {
                 document.execCommand("insertText", false, text);
                 return;
             }
 
+            const shouldRemoveCharacters: boolean | undefined = settings["remove-characters"] as
+                | boolean
+                | undefined;
 
-            const shouldRemoveCharacters: boolean | undefined = (
-                await browser.storage.sync.get(["remove-characters"])
-            )["remove-characters"] as boolean | undefined;
-
-            const equalsSplitStrat: string | undefined = (
-                await browser.storage.sync.get(["equals-strategy"])
-            )["equals-strategy"] as string | undefined;
+            const equalsSplitStrat = settings["equals-strategy"] as string | undefined;
 
             if (text.includes("=")) {
                 const parts = text.split("=", 2);
@@ -48,7 +50,8 @@ if (window) {
             }
 
             const convertedText = await parseEntireCalculation(text, {
-                stripLetters: shouldRemoveCharacters || false
+                stripLetters: shouldRemoveCharacters || false,
+                allowBSectionTools: (settings["b-tools"] as boolean | undefined) || false
             });
             const mathInput = document.getElementsByTagName("input")[0];
             mathInput.focus();

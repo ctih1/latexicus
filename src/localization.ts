@@ -1,6 +1,13 @@
 import en from "./localization/en.json";
 import fi from "./localization/fi.json";
 
+try {
+    window;
+    var isBrowser = true;
+} catch (e) {
+    var isBrowser = false;
+}
+
 const LOCALES: { [key: string]: Map<string, string> } = {
     en: new Map(Object.entries(en)),
     fi: new Map(Object.entries(fi))
@@ -12,7 +19,10 @@ export async function t(
     language: string | undefined = undefined
 ): Promise<string> {
     const lang: string =
-        language || ((await browser.storage.sync.get("lang-select"))["lang-select"] as string);
+        language ||
+        (isBrowser
+            ? ((await browser.storage.sync.get("lang-select"))["lang-select"] as string)
+            : "en");
 
     const languageKeys = LOCALES[lang || "en"];
 
@@ -26,7 +36,9 @@ export async function t(
 }
 
 export async function localizeAll() {
-    const lang: string = (await browser.storage.sync.get("lang-select"))["lang-select"] as string;
+    const lang: string = isBrowser
+        ? ((await browser.storage.sync.get("lang-select"))["lang-select"] as string)
+        : "en";
 
     const languageKeys = LOCALES[lang || "en"];
 

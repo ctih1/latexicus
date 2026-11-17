@@ -6,7 +6,8 @@ const SETTING_IDS = [
     "equals-strategy",
     "lang-select",
     "hide-error-prompt",
-    "always-convert"
+    "always-convert",
+    "b-tools"
 ];
 
 const DEFAULT_VALUES: { [key: string]: string } = {

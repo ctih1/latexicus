@@ -106,6 +106,10 @@ export async function convertToString(
             token.text = "(" + token.text + ")";
         }
 
+        if (token.text?.includes("!") && !options.allowBSectionTools) {
+            showNotification(await t("b_tools_warning", { token: "!" }), 15000, "error");
+        }
+
         if (token.text?.includes("!") && options.allowBSectionTools) {
             const [before, after, empty] = token.text!.split("!", 3);
             console.log([before, after, empty]);
@@ -124,7 +128,7 @@ export async function convertToString(
             for (let i = value; i > 0; i--) {
                 output += i + "*";
             }
-            output = `${output.slice(0, output.length - 1)}${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}`;
+            output = `(${output.slice(0, output.length - 1)})${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}`;
         } else {
             output += token.text;
         }
@@ -206,6 +210,14 @@ export async function convertToString(
             }
 
             case "binom": {
+                if (!options.allowBSectionTools) {
+                    showNotification(
+                        await t("b_tools_warning", { token: "binom" }),
+                        15000,
+                        "error"
+                    );
+                    break;
+                }
                 // n=5, k=3
                 const firstArgN = token.arguments[0].latex[0];
                 const secondArgK = token.arguments[1].latex[0];

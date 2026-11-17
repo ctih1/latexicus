@@ -32,5 +32,8 @@
     "notifications_clear_all": "Tyhjennä viestit",
     "send_error_button_loading": "Lähetetään...",
     "always_convert_h": "Muunna aina",
-    "always_convert_d": "Yritä muuntaa lasku, vaikka Latexicus ei tunnistaisi siinä LaTeXia."
+    "always_convert_d": "Yritä muuntaa lasku, vaikka Latexicus ei tunnistaisi siinä LaTeXia.",
+    "allow_b_tools_settings_h": "Salli B-osan työkalujen käyttö",
+    "allow_b_tools_settings_d": "Sallii binomien sekä kertoman (eli: 5! = 5*4*3*2*1) laskemisen.",
+    "b_tools_warning": "Salli B-osan työkalujen käyttö asetuksista käyttääkseen \"{token}\""
 }

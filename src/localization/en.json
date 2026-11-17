@@ -32,5 +32,8 @@
     "notifications_clear_all": "Clear all",
     "send_error_button_loading": "Sending...",
     "always_convert_h": "Always convert",
-    "always_convert_d": "Always tries to convert calculations, even if Latexicus doesn't detect any LaTeX."
+    "always_convert_d": "Always tries to convert calculations, even if Latexicus doesn't detect any LaTeX.",
+    "allow_b_tools_settings_h": "Allow the use of B-section tools",
+    "allow_b_tools_settings_d": "Enables the use of binomials and factorials (e.g. 5! = 5*4*3*2*1)",
+    "b_tools_warning": "Enable the use of B-section tools in the settings to unlock \"{token}\""
 }

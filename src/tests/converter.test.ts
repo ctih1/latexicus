@@ -123,9 +123,9 @@ test("sqrt with nested values", async () => {
 
 // more advanced factorials arent supported yet, aka like (5-2)!
 test("simple factorial", async () => {
-    expect(await parseEntireCalculation("5!", { allowBSectionTools: true })).toBe("5*4*3*2*1");
+    expect(await parseEntireCalculation("5!", { allowBSectionTools: true })).toBe("(5*4*3*2*1)");
     expect(await parseEntireCalculation("8!", { allowBSectionTools: true })).toBe(
-        "8*7*6*5*4*3*2*1"
+        "(8*7*6*5*4*3*2*1)"
     );
 });
 
@@ -168,22 +168,24 @@ test.each([["sin"], ["cos"], ["tan"], ["arcsin"], ["arccos"], ["arctan"]])(
 
 test("advanced factorial", async () => {
     expect(await parseEntireCalculation("(5-2)!")).toBe("(5-2)!");
-    expect(await parseEntireCalculation("(5-2)!", { allowBSectionTools: true })).toBe("3*2*1");
+    expect(await parseEntireCalculation("(5-2)!", { allowBSectionTools: true })).toBe("(3*2*1)");
     expect(await parseEntireCalculation("(8-2)!", { allowBSectionTools: true })).toBe(
-        "6*5*4*3*2*1"
+        "(6*5*4*3*2*1)"
     );
-    expect(await parseEntireCalculation("(10/2)!", { allowBSectionTools: true })).toBe("5*4*3*2*1");
+    expect(await parseEntireCalculation("(10/2)!", { allowBSectionTools: true })).toBe(
+        "(5*4*3*2*1)"
+    );
     expect(await parseEntireCalculation("5!(4-2)", { allowBSectionTools: true })).toBe(
-        "5*4*3*2*1*(4-2)"
+        "(5*4*3*2*1)*(4-2)"
     );
     expect(await parseEntireCalculation("5!*(4-2)", { allowBSectionTools: true })).toBe(
-        "5*4*3*2*1*(4-2)"
+        "(5*4*3*2*1)*(4-2)"
     );
     expect(await parseEntireCalculation("5!5!", { allowBSectionTools: true })).toBe(
-        "5*4*3*2*1*5*4*3*2*1"
+        "(5*4*3*2*1)*(5*4*3*2*1)"
     );
     expect(await parseEntireCalculation("3!(5-3)!", { allowBSectionTools: true })).toBe(
-        "3*2*1*2*1"
+        "(3*2*1)*(2*1)"
     );
 });
 
@@ -192,10 +194,10 @@ test("binoms", async () => {
         "(5!/(3!(5-3)!))"
     );
     expect(await parseEntireCalculation("\\binom{5}{3}", { allowBSectionTools: true })).toBe(
-        "((5*4*3*2*1)/(3*2*1*2*1))"
+        "(((5*4*3*2*1))/((3*2*1)*(2*1)))"
     );
 
     expect(await parseEntireCalculation("\\binom{5}{3}\\cdot8", { allowBSectionTools: true })).toBe(
-        "((5*4*3*2*1)/(3*2*1*2*1))*8"
+        "(((5*4*3*2*1))/((3*2*1)*(2*1)))*8"
     );
 });
