@@ -209,7 +209,8 @@ test("binoms", async () => {
 test("hard all-in-ones", async () => {
     expect(
         await parseEntireCalculation("15{,}5\\cdot \\frac{12}{8^2}+\\sin 20+5\\sqrt{25}-5!", {
-            allowBSectionTools: true
+            allowBSectionTools: true,
+            stripLetters: true
         })
     ).toBe("15.5*(12/8^2)+sin(20)+5*√(25;2)-(5*4*3*2*1)");
 });

@@ -1,6 +1,6 @@
 import { t } from "./localization";
 
-const VERSION="0.2.0";
+const VERSION="0.2.1";
 
 try {
     window;
