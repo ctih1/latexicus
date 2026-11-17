@@ -30,5 +30,7 @@
     "send_error_request_sent": "Report sent.",
     "send_error_request_fail": "Failed to send report.",
     "notifications_clear_all": "Clear all",
-    "send_error_button_loading": "Sending..."
+    "send_error_button_loading": "Sending...",
+    "always_convert_h": "Always convert",
+    "always_convert_d": "Always tries to convert calculations, even if Latexicus doesn't detect any LaTeX."
 }

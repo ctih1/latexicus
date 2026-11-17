@@ -13,9 +13,11 @@ if (window) {
             if (!e.clipboardData) {
                 return;
             }
+            
+            
             let text = e.clipboardData.getData("text").replaceAll(" ", "");
 
-            if (!text.includes("\\")) {
+            if (!text.includes("\\") && !(await browser.storage.sync.get("always-convert"))["always-convert"]) {
                 return;
             }
 

@@ -5,7 +5,8 @@ const SETTING_IDS = [
     "hide-green-dot",
     "equals-strategy",
     "lang-select",
-    "hide-error-prompt"
+    "hide-error-prompt",
+    "always-convert"
 ];
 
 const DEFAULT_VALUES: { [key: string]: string } = {

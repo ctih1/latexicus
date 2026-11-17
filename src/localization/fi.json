@@ -30,5 +30,7 @@
     "send_error_request_sent": "Raportti lähetetty.",
     "send_error_request_fail": "Raportin lähetys epäonnistui.",
     "notifications_clear_all": "Tyhjennä viestit",
-    "send_error_button_loading": "Lähetetään..."
+    "send_error_button_loading": "Lähetetään...",
+    "always_convert_h": "Muunna aina",
+    "always_convert_d": "Yritä muuntaa lasku, vaikka Latexicus ei tunnistaisi siinä LaTeXia."
 }
