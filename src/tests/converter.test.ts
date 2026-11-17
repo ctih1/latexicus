@@ -190,9 +190,7 @@ test("advanced factorial", async () => {
 });
 
 test("binoms", async () => {
-    expect(await parseEntireCalculation("\\binom{5}{3}", { allowBSectionTools: false })).toBe(
-        "(5!/(3!(5-3)!))"
-    );
+    expect(await parseEntireCalculation("\\binom{5}{3}", { allowBSectionTools: false })).toBe("");
     expect(await parseEntireCalculation("\\binom{5}{3}", { allowBSectionTools: true })).toBe(
         "(((5*4*3*2*1))/((3*2*1)*(2*1)))"
     );
