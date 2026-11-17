@@ -1,6 +1,6 @@
 import { t } from "./localization";
 
-const VERSION="0.1.2";
+const VERSION="0.1.3";
 
 try {
     window;
@@ -47,7 +47,7 @@ if (isBrowser) {
         var reportSection: HTMLDivElement = document.createElement("div");
         reportSection.id = "report-section";
         reportSection.style =
-            "position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: none; flex-direction: column; font-size: 0.8rem;";
+            "position: absolute; bottom: 24px; right: 24px; display: none; flex-direction: column; font-size: 0.8rem;";
         reportSection.innerHTML = `
     <p style="text-align: center">${await t("noticed_error_label")}</p>
     <button id="report-submit" class="key transition-all bg-blue-light border-blue-border text-black" style="height: 40px; border-radius: var(--radius-sm); padding: 8px" id="report">${await t("send_error_button")}</button>

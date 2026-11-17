@@ -14,7 +14,7 @@ export async function t(
     const lang: string =
         language || ((await browser.storage.sync.get("lang-select"))["lang-select"] as string);
 
-    const languageKeys = LOCALES[lang];
+    const languageKeys = LOCALES[lang || "en"];
 
     let value = languageKeys.get(key) || key;
 
@@ -28,7 +28,7 @@ export async function t(
 export async function localizeAll() {
     const lang: string = (await browser.storage.sync.get("lang-select"))["lang-select"] as string;
 
-    const languageKeys = LOCALES[lang];
+    const languageKeys = LOCALES[lang || "en"];
 
     // the for loop for some reason wouldnt work with for(const [k,v] of languageKeys(.entries())) so using this.
     for (const key of Array.from(languageKeys.keys())) {

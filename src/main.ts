@@ -17,11 +17,13 @@ if (window) {
             
             let text = e.clipboardData.getData("text").replaceAll(" ", "");
 
+            e.preventDefault();
+
             if (!text.includes("\\") && !(await browser.storage.sync.get("always-convert"))["always-convert"]) {
+                document.execCommand("insertText", false, text);
                 return;
             }
 
-            e.preventDefault();
 
             const shouldRemoveCharacters: boolean | undefined = (
                 await browser.storage.sync.get(["remove-characters"])
