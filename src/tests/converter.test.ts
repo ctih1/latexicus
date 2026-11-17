@@ -129,6 +129,30 @@ test("simple factorial", async () => {
     );
 });
 
+test("advanced factorial", async () => {
+    expect(await parseEntireCalculation("(5-2)!")).toBe("(5-2)!");
+    expect(await parseEntireCalculation("(5-2)!", { allowBSectionTools: true })).toBe("(3*2*1)");
+    expect(await parseEntireCalculation("(8-2)!", { allowBSectionTools: true })).toBe(
+        "(6*5*4*3*2*1)"
+    );
+    expect(await parseEntireCalculation("(10/2)!", { allowBSectionTools: true })).toBe(
+        "(5*4*3*2*1)"
+    );
+    expect(await parseEntireCalculation("5!(4-2)", { allowBSectionTools: true })).toBe(
+        "(5*4*3*2*1)*(4-2)"
+    );
+    expect(await parseEntireCalculation("5!*(4-2)", { allowBSectionTools: true })).toBe(
+        "(5*4*3*2*1)*(4-2)"
+    );
+    expect(await parseEntireCalculation("5!5!", { allowBSectionTools: true })).toBe(
+        "(5*4*3*2*1)*(5*4*3*2*1)"
+    );
+    expect(await parseEntireCalculation("3!(5-3)!", { allowBSectionTools: true })).toBe(
+        "(3*2*1)*(2*1)"
+    );
+    expect(await parseEntireCalculation("5-3!", { allowBSectionTools: true })).toBe("5-(3*2*1)");
+});
+
 test("test stripping letters", async () => {
     expect(await parseEntireCalculation("5N\\cdot8kg", { stripLetters: true })).toBe("5*8");
     expect(await parseEntireCalculation("5\\cdot8kg", { stripLetters: true })).toBe("5*8");
@@ -152,6 +176,8 @@ test.each([["sin"], ["cos"], ["tan"], ["arcsin"], ["arccos"], ["arctan"]])(
         expect(await parseEntireCalculation(`\\${mathFunc} 50`)).toBe(`${mathFunc}(50)`);
         expect(await parseEntireCalculation(`\\${mathFunc}(50\\cdot2)`)).toBe(`${mathFunc}(50*2)`);
         expect(await parseEntireCalculation(`\\${mathFunc}(50)\\cdot2`)).toBe(`${mathFunc}(50)*2`);
+        expect(await parseEntireCalculation(`\\${mathFunc}50+2`)).toBe(`${mathFunc}(50)+2`);
+        expect(await parseEntireCalculation(`\\${mathFunc}(50+2)`)).toBe(`${mathFunc}(50+2)`);
         expect(await parseEntireCalculation(`\\${mathFunc} 50\\cdot8`)).toBe(`${mathFunc}(50)*8`);
         expect(await parseEntireCalculation(`\\${mathFunc}(\\frac{50}{2})`)).toBe(
             `${mathFunc}((50/2))`
@@ -165,29 +191,6 @@ test.each([["sin"], ["cos"], ["tan"], ["arcsin"], ["arccos"], ["arctan"]])(
         expect(await parseEntireCalculation(`\\${mathFunc} 20\\cdot 8`)).toBe(`${mathFunc}(20)*8`);
     }
 );
-
-test("advanced factorial", async () => {
-    expect(await parseEntireCalculation("(5-2)!")).toBe("(5-2)!");
-    expect(await parseEntireCalculation("(5-2)!", { allowBSectionTools: true })).toBe("(3*2*1)");
-    expect(await parseEntireCalculation("(8-2)!", { allowBSectionTools: true })).toBe(
-        "(6*5*4*3*2*1)"
-    );
-    expect(await parseEntireCalculation("(10/2)!", { allowBSectionTools: true })).toBe(
-        "(5*4*3*2*1)"
-    );
-    expect(await parseEntireCalculation("5!(4-2)", { allowBSectionTools: true })).toBe(
-        "(5*4*3*2*1)*(4-2)"
-    );
-    expect(await parseEntireCalculation("5!*(4-2)", { allowBSectionTools: true })).toBe(
-        "(5*4*3*2*1)*(4-2)"
-    );
-    expect(await parseEntireCalculation("5!5!", { allowBSectionTools: true })).toBe(
-        "(5*4*3*2*1)*(5*4*3*2*1)"
-    );
-    expect(await parseEntireCalculation("3!(5-3)!", { allowBSectionTools: true })).toBe(
-        "(3*2*1)*(2*1)"
-    );
-});
 
 test("binoms", async () => {
     expect(await parseEntireCalculation("\\binom{5}{3}", { allowBSectionTools: false })).toBe("");

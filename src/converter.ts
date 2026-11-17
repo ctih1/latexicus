@@ -78,15 +78,19 @@ export function needsMultiplication(
     return false;
 }
 
+function breakupCalculation(input: string): string[] {
+    return input.split(/(?<!\([^\)]*)(\+|\-|\*|\/)/);
+}
+
 export async function convertToString(
     token: FuckedToken,
     previousToken: FuckedToken | undefined,
     tokenTree: FuckedToken[] = [],
     options: Options = {}
 ): Promise<[string, FuckedToken]> {
-    // console.log(
-    //     `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text}=${token.type} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
-    // );
+    console.log(
+        `|${"----".repeat(tokenTree.length)}+ ${token.name || token.text}=${token.type} (prev: ${previousToken?.name || previousToken?.text}=${previousToken?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
+    );
     let output = "";
 
     // console.log(JSON.stringify({ nested: nested, ...token }, undefined, 2));
@@ -103,7 +107,8 @@ export async function convertToString(
             funcsWithParenthesis.includes(previousToken.name || "") &&
             !token.text!.startsWith("(")
         ) {
-            token.text = "(" + token.text + ")";
+            const funcArguments = breakupCalculation(token.text!);
+            token.text = "(" + funcArguments[0] + ")" + funcArguments.slice(1).join("");
         }
 
         if (token.text?.includes("!") && !options.allowBSectionTools) {
@@ -111,7 +116,18 @@ export async function convertToString(
         }
 
         if (token.text?.includes("!") && options.allowBSectionTools) {
-            const [before, after, empty] = token.text!.split("!", 3);
+            const parts = breakupCalculation(token.text!);
+
+            let targetIndex = 0;
+            let targetPart = "";
+            for (const [index, part] of parts.entries()) {
+                if (part.includes("!")) {
+                    targetIndex = index;
+                    targetPart = part;
+                    break;
+                }
+            }
+            const [before, after, empty] = targetPart.split("!", 3);
             console.log([before, after, empty]);
 
             const innerValue = await parseEntireCalculation(before, options);
@@ -128,7 +144,7 @@ export async function convertToString(
             for (let i = value; i > 0; i--) {
                 output += i + "*";
             }
-            output = `(${output.slice(0, output.length - 1)})${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}`;
+            output = `${parts.slice(0, targetIndex).join("")}(${output.slice(0, output.length - 1)})${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}${parts.slice(targetIndex + 1).join("")}`;
         } else {
             output += token.text;
         }
