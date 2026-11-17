@@ -100,9 +100,9 @@ test("multiplication with functions on both sides", async () => {
 });
 
 test("exponents", async () => {
-    // expect(await parseEntireCalculation("2^2")).toBe("2^2");
-    // expect(await parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
-    // expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
+    expect(await parseEntireCalculation("2^2")).toBe("2^2");
+    expect(await parseEntireCalculation("2^{2.5}")).toBe("2^2.5");
+    expect(await parseEntireCalculation("2^{\\frac{2.5}{8}}")).toBe("2^(2.5/8)");
     expect(await parseEntireCalculation("8^{12}+8")).toBe("8^12+8");
 });
 
@@ -151,6 +151,9 @@ test("advanced factorial", async () => {
         "(3*2*1)*(2*1)"
     );
     expect(await parseEntireCalculation("5-3!", { allowBSectionTools: true })).toBe("5-(3*2*1)");
+    expect(await parseEntireCalculation("\\sqrt{25}-5!", { allowBSectionTools: true })).toBe(
+        "√(25;2)-(5*4*3*2*1)"
+    );
 });
 
 test("test stripping letters", async () => {
@@ -201,4 +204,12 @@ test("binoms", async () => {
     expect(await parseEntireCalculation("\\binom{5}{3}\\cdot8", { allowBSectionTools: true })).toBe(
         "(((5*4*3*2*1))/((3*2*1)*(2*1)))*8"
     );
+});
+
+test("hard all-in-ones", async () => {
+    expect(
+        await parseEntireCalculation("15{,}5\\cdot \\frac{12}{8^2}+\\sin 20+5\\sqrt{25}-5!", {
+            allowBSectionTools: true
+        })
+    ).toBe("15.5*(12/8^2)+sin(20)+5*√(25;2)-(5*4*3*2*1)");
 });

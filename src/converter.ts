@@ -132,7 +132,7 @@ export async function convertToString(
 
             const innerValue = await parseEntireCalculation(before, options);
             const outerValue: string | undefined =
-                after.length >= 1
+                (after?.length || 0) >= 1
                     ? await parseEntireCalculation(
                           after + (empty === undefined ? "" : "!"),
                           options
