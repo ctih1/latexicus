@@ -121,7 +121,6 @@ test("sqrt with nested values", async () => {
     expect(await parseEntireCalculation("\\sqrt{\\frac{100}{4}}\\cdot8")).toBe("√((100/4);2)*8");
 });
 
-// more advanced factorials arent supported yet, aka like (5-2)!
 test("simple factorial", async () => {
     expect(await parseEntireCalculation("5!", { allowBSectionTools: true })).toBe("(5*4*3*2*1)");
     expect(await parseEntireCalculation("8!", { allowBSectionTools: true })).toBe(
