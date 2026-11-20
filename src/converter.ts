@@ -31,7 +31,7 @@ export function needsMultiplication(
     console.log(
         `|${"----".repeat(tokenTree.length)}+ ${current.name || current.text}=${current.type} (prev: ${last?.name || last?.text}=${last?.type});${tokenTree.map(a => a.name || a.text).join("->")}`
     );
-    if (!last) {
+    if (last === undefined) {
         console.debug("Last token not set, denying *");
         return false;
     }
@@ -45,8 +45,17 @@ export function needsMultiplication(
 
     const targetCurrentText = current.name || current.text!;
     const targetPrevText = last.name || last.text!;
-    if (targetCurrentText.endsWith(")")) {
+    if (targetCurrentText === ")" || targetCurrentText === "(") {
+        return false;
+    }
+    if (
+        (targetCurrentText.startsWith("(") || targetCurrentText.endsWith(")")) &&
+        funcsWithParenthesis.includes(last.name || "")
+    ) {
         console.debug("Current target endswith )");
+        return false;
+    }
+    if (last.name === "sqrt") {
         return false;
     }
     if (targetPrevText.endsWith("(")) return false;
@@ -71,6 +80,8 @@ export function needsMultiplication(
             if (last.name === "frac" && current.name === "frac") return false;
             console.log("allowing comma texcomm");
 
+            return true;
+        } else {
             return true;
         }
     }
@@ -146,9 +157,13 @@ export async function convertToString(
                     : undefined;
 
             const value: number = Parser.evaluate(innerValue);
-
-            for (let i = value; i > 0; i--) {
-                output += i + "*";
+            console.log(`value: ${value}`);
+            if (value === 0) {
+                output = "0*";
+            } else {
+                for (let i = value; i > 0; i--) {
+                    output += i + "*";
+                }
             }
             output = `${parts.slice(0, targetIndex).join("")}(${output.slice(0, output.length - 1)})${outerValue ? (outerValue.startsWith("*") ? "" : "*") + outerValue : ""}${parts.slice(targetIndex + 1).join("")}`;
         } else {

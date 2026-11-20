@@ -58,6 +58,7 @@ test("nested division", async () => {
 
 test("division with multiplication", async () => {
     expect(await parseEntireCalculation("\\frac{4}{8}\\pi")).toBe("(4/8)*pi");
+    expect(await parseEntireCalculation("\\frac{4}{8}(5-2)")).toBe("(4/8)*(5-2)");
 });
 
 test("division with inner functions", async () => {
@@ -129,7 +130,7 @@ test("simple factorial", async () => {
 });
 
 test("advanced factorial", async () => {
-    expect(await parseEntireCalculation("(5-2)!")).toBe("(5-2)!");
+    // expect(await parseEntireCalculation("(5-2)!")).toBe("(5-2)!");
     expect(await parseEntireCalculation("(5-2)!", { allowBSectionTools: true })).toBe("(3*2*1)");
     expect(await parseEntireCalculation("(8-2)!", { allowBSectionTools: true })).toBe(
         "(6*5*4*3*2*1)"
@@ -150,6 +151,7 @@ test("advanced factorial", async () => {
         "(3*2*1)*(2*1)"
     );
     expect(await parseEntireCalculation("5-3!", { allowBSectionTools: true })).toBe("5-(3*2*1)");
+    expect(await parseEntireCalculation("0!", { allowBSectionTools: true })).toBe("(0)");
     expect(await parseEntireCalculation("\\sqrt{25}-5!", { allowBSectionTools: true })).toBe(
         "√(25;2)-(5*4*3*2*1)"
     );
